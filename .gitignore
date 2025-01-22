@@ -1,0 +1,29 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+
+# Kotlin
+*.kt~
+*.kts~
+
+# Gradle
+.gradle/
+build/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
