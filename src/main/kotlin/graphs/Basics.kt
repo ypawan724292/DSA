@@ -206,7 +206,7 @@ class Basics {
             val size = queue.size
             repeat(size) {
                 val node = queue.removeFirst()
-                if (node == end) return distance+1
+                if (node == end) return distance + 1
                 graph[node]?.forEach {
                     if (it !in visited) {
                         visited.add(it)
