@@ -42,7 +42,9 @@ class SingleSourceBFS {
      */
     @Important
     fun findShortestPath(grid: Array<CharArray>): Int {
+
         /*
+        TC : O(m*n)
         Here starting cell is not at 0,0 ...so we need to identify by iterating over the matrix with conditions
         1. create visited cell set
         2. from each cell check for the food cell with bfs
@@ -196,6 +198,13 @@ class SingleSourceBFS {
      * We need to wait until time 16 so that (0, 0) and (4, 4) are connected.
      */
     fun swimInWater(grid: Array<IntArray>): Int {
+        /**
+         * Intuition:
+         * Using BFS to find the minimum time to reach the destination.
+         * We can only move to the cell where the elevation is less than or equal to the current time
+         * bcuz at time t, the depth of the water everywhere is t.
+         *
+         */
         val m = grid.size
         val n = grid[0].size
 

@@ -8,6 +8,8 @@ class SimpleDFSAndBFS {
      * Create adjacency list from edges
      */
     fun createAdjList(edges: Array<IntArray>): Map<Int, List<Int>> {
+        // TC : O(E)
+        // SC : O(V+E) Bcuz we are storing all the edges and vertices
         val adjList = mutableMapOf<Int, MutableList<Int>>()
         for (edge in edges) {
             adjList[edge[0]] = adjList.getOrDefault(edge[0], mutableListOf()).apply {
@@ -59,6 +61,7 @@ class SimpleDFSAndBFS {
      * Given edges and the integers n, source, and destination, return true if there is a valid path from source to destination, or false otherwise.
      */
     fun findIfPathExists(edges: Array<IntArray>, source: Int, destination: Int): Boolean {
+        // TC : O(V+E)
         val adjList = mutableMapOf<Int, MutableList<Int>>()
 
         for (edge in edges) {
@@ -98,6 +101,10 @@ class SimpleDFSAndBFS {
         2. create visited set
         3. create parent map : it is used to keep track of parent node of child node
         4. 1->2->3->4->1
+
+        Intuition:
+        1. To detect cycle in undirected graph, we need to keep track of parent node of child node
+        2. If we visit a node which is already visited and it is not parent of current node, then there is a cycle
          */
         val adjList = createAdjList(edges)
 
@@ -111,6 +118,7 @@ class SimpleDFSAndBFS {
             val curr = stack.removeLast()
             adjList[curr]?.forEach { neighbour ->
                 if (neighbour !in visited) {
+                    stack.add(neighbour)
                     visited.add(neighbour)
                     parent[neighbour] = curr
                 } else if (parent[curr] != neighbour) {

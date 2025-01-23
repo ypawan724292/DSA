@@ -114,7 +114,7 @@ class MultiSourceBFS {
                     val nextRow = curRow + dir[0]
                     val nextCol = curCol + dir[1]
 
-                    if (nextRow in 0..m - 1 && nextCol in 0..n - 1 && visited[nextRow][nextCol]) {
+                    if (nextRow in 0..m - 1 && nextCol in 0..n - 1 && !visited[nextRow][nextCol]) {
                         visited[nextRow][nextCol] = true
                         water += maxOf(0, curHeight - grid[nextRow][nextCol])
                         val deligateHeight = maxOf(curHeight, grid[nextRow][nextCol])
@@ -487,6 +487,7 @@ class MultiSourceBFS {
         // run bfs to find the min steps to traverse the remaining cells
         // check if any 1 in the cells
         // if yes -1 else steps
+        //TC: O(m*n) SC: O(m*n)
 
 
         val m = grid.size

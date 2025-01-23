@@ -108,8 +108,9 @@ class Basics {
         - Applications: Shortest path, minimum spanning tree, social networking.
         - Optimal for finding shortest path.
      */
-    fun bfs(graph: Map<Int, List<Int>>, start: Int, visited: MutableSet<Int>) {
+    fun bfs(graph: Map<Int, List<Int>>, start: Int) {
         val queue = ArrayDeque<Int>()
+        val visited = mutableSetOf<Int>()
         queue.add(start)
         visited.add(start)
         while (queue.isNotEmpty()) {
