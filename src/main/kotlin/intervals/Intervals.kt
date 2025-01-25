@@ -398,7 +398,7 @@ class Intervals {
         meetings.sortBy { it[0] }
         for (meeting in meetings) {
             if (pq.isNotEmpty() && pq.peek() < meeting[0]) {
-                pq.poll()
+                pq.remove()
             }
             pq.add(meeting[1])
         }
@@ -456,7 +456,19 @@ class Intervals {
             result = maxOf(result, count)
         }
 
-        return result
+//        return result
+        val pq = PriorityQueue<Int> { a, b -> a - b }
+        val timings = Array(arr.size) { intArrayOf(arr[it], dep[it]) }
+        timings.sortBy { it[0] }
+        for (timing in timings) {
+            if (pq.isNotEmpty() && pq.peek() < timing[0]) {
+                pq.remove()
+            }
+
+            pq.add(timing[1])
+        }
+
+        return pq.size
     }
 
     /**
@@ -913,8 +925,6 @@ class Intervals {
 
 
     }
-
-
 
 
 }

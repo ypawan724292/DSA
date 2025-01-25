@@ -222,11 +222,24 @@ class Problems {
      *
      * Example :
      * Input: "ababa"
+     * Distinct Substrings: ["a", "ab", "aba", "abab", "ababa", "b", "ba", "bab", "baba", "a", "ab", "aba", "b", "ba", "a"]
      * Output: 10
      *
      */
     fun countDistinctSubstrings(s: String): Int {
 
+        /*
+            Intution:
+            1. We can find the number of distinct substrings of a string using a trie.
+            2. We can insert all the suffixes of the string into the trie.
+            3. The number of nodes in the trie will be the number of distinct substrings of the string.
+                Because each node represents a distinct substring.
+
+               Exapmle: "ababa"
+               Suffixes: "ababa", "baba", "aba", "ba", "a"
+               Distinct Substrings: ["a", "ab", "aba","abab", "ababa", "b", "ba", "bab", "baba"] +1 for empty string
+               count = 10
+         */
         data class TrieNode(
             val children: MutableMap<Char, TrieNode> = mutableMapOf(),
             var isEndOfWord: Boolean = false
@@ -252,6 +265,57 @@ class Problems {
         }
 
         return count + 1 // +1 for empty string or input string
+    }
+
+    /**
+     * Longest Common Prefix
+     * Problem Statement:
+     * Given an array of strings, ‘A’ of size ‘N’.
+     * Find the longest common prefix string amongst all the strings present in the array.
+     *
+     * Example:
+     * Input: [“apple”, “ape”, “april”]
+     * Output: “ap”
+     */
+    fun longestCommonPrefix(arr: Array<String>): String {
+        data class TrieNode(
+            val children: MutableMap<Char, TrieNode> = mutableMapOf(),
+            var count: Int = 0
+        ) {
+            fun containsKey(char: Char) = children.containsKey(char)
+            fun get(char: Char) = children[char]
+            fun put(char: Char, node: TrieNode) {
+                children[char] = node
+            }
+        }
+
+        val root = TrieNode()
+
+
+        fun insert(word: String) {
+            var node = root
+            for (char in word) {
+                if (!node.containsKey(char)) {
+                    node.put(char, TrieNode())
+                }
+                node = node.get(char)!!
+                node.count++
+            }
+        }
+
+        for (word in arr) {
+            insert(word)
+        }
+
+        var prefix = ""
+        var node = root
+        while (node.count == arr.size) {
+            val char = node.children.keys.first()
+            prefix += char
+            node = node.get(char)!!
+        }
+
+        return prefix
     }
 
 
@@ -354,17 +418,18 @@ class Problems {
 
             fun maxXOR(num: Int): Int {
                 var node = root
-                var xor = 0
+                var maxXor = 0
+
                 for (i in 31 downTo 0) {
                     val bit = (num shr i) and 1
                     if (node.containsKey(1 - bit)) {
-                        xor = xor or (1 shl i)
+                        maxXor = maxXor or (1 shl i)
                         node = node.get(1 - bit)!!
                     } else {
                         node = node.get(bit)!!
                     }
                 }
-                return xor
+                return maxXor
             }
         }
 
@@ -519,8 +584,7 @@ fun main() {
     val problems = Problems()
     println(
         problems.maxXORWithQueries(
-            intArrayOf(0, 1, 2, 3, 4),
-            arrayOf(intArrayOf(3, 1), intArrayOf(1, 3), intArrayOf(5, 6))
+            intArrayOf(0, 1, 2, 3, 4), arrayOf(intArrayOf(3, 1), intArrayOf(1, 3), intArrayOf(5, 6))
         ).contentToString()
     )
 }
