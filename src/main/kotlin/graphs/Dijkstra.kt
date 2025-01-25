@@ -147,6 +147,8 @@ class Dijkstra {
      */
 
     fun networkDelayTime(times: Array<IntArray>, n: Int, k: Int): Int {
+        // TC : O(E log V)
+
         // create adjlist
         val adjList = createAdjList(times)
 
@@ -174,7 +176,6 @@ class Dijkstra {
                     }
 
                 }
-
             }
 
         }
@@ -247,7 +248,7 @@ class Dijkstra {
      */
     @Important
     fun findCheapestPrice(n: Int, flights: Array<IntArray>, src: Int, dst: Int, k: Int): Int {
-
+        // TC : O(E log V)
         val adjList = mutableMapOf<Int, MutableList<IntArray>>()
         for (flight in flights) {
             val (u, v, w) = flight
@@ -262,7 +263,6 @@ class Dijkstra {
         cost[src] = 0
         pq.add(intArrayOf(src, 0, 0))
 
-        var level = 0
         while (pq.isNotEmpty()) {
             val size = pq.size
             repeat(size) {
@@ -338,6 +338,7 @@ class Dijkstra {
      * There are no duplicate highways.
      */
     fun minCost(edges: Array<IntArray>, n: Int, discount: Int): Int {
+        // TC : O(E log V)
         val adjList = createAdjList(edges)
 
 

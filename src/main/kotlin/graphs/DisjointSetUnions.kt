@@ -144,26 +144,25 @@ class DisjointSetUnions {
      */
 
     inner class DSU(n: Int) {
-        val parent = IntArray(n) { -1 }
-        val rank = IntArray(n) { 1 }
+        val parent = IntArray(n) { it } // Initialize each node as its own parent
+        val rank = IntArray(n) { 1 }   // Initialize rank to 1 for all nodes
 
         /*
-        * find operation
-        * Time complexity: amortized O(1)
-        * What is amortized time complexity?
-        * Amortized time complexity is the total time required to perform a sequence of operations divided by the number of operations.
-        */
+         * Union operation
+         * Time complexity: O(α(n)), where α(n) is the inverse Ackermann function
+         */
         fun union(u: Int, v: Int): Boolean {
-            val c = find(u)
-            val d = find(v)
-            if (c != d) {
-                if (rank[c] > rank[d]) {
-                    parent[d] = c
-                } else if (rank[c] < rank[d]) {
-                    parent[c] = d
+            val rootU = find(u)
+            val rootV = find(v)
+
+            if (rootU != rootV) {
+                if (rank[rootU] > rank[rootV]) {
+                    parent[rootV] = rootU
+                } else if (rank[rootU] < rank[rootV]) {
+                    parent[rootU] = rootV
                 } else {
-                    parent[c] = d
-                    rank[d] += 1
+                    parent[rootV] = rootU
+                    rank[rootU] += 1
                 }
                 return true
             }
@@ -171,15 +170,14 @@ class DisjointSetUnions {
         }
 
         /*
-         * find operation
+         * Find operation with path compression
          * Time complexity: amortized O(1)
-         * What is path compression?
-         * Path compression is a technique used to flatten the structure of the tree by making every node point
-         *  to the root of the tree.
          */
         fun find(x: Int): Int {
-            if (parent[x] == -1) return x
-            parent[x] = find(parent[x]) // path compression
+            if (x < 0 || x >= parent.size) throw IllegalArgumentException("Invalid node index: $x")
+            if (parent[x] != x) {
+                parent[x] = find(parent[x]) // Path compression
+            }
             return parent[x]
         }
     }
@@ -202,8 +200,8 @@ class DisjointSetUnions {
                 } else if (rankC < rankD) {
                     parent[c] = d
                 } else {
-                    parent[c] = d
-                    rank[d] = rankD + 1
+                    parent[d] = c
+                    rank[c] = rankC + 1
                 }
                 return true
             }
@@ -211,12 +209,17 @@ class DisjointSetUnions {
         }
 
         fun find(x: Int): Int {
-            if (!parent.containsKey(x)) return x
-            parent[x] = find(parent[x]!!)
+            if (!parent.containsKey(x)) {
+                parent[x] = x // Initialize parent for new element
+                rank[x] = 0   // Initialize rank for new element
+            }
+            if (parent[x] != x) {
+                parent[x] = find(parent[x]!!) // Path compression
+            }
             return parent[x]!!
         }
-
     }
+
 
     /**
      * Minimum Spanning Tree (MST) is a subset of the edges of a connected,
@@ -282,6 +285,7 @@ class DisjointSetUnions {
             intArrayOf(-1, 0)
         )
 
+        // TC: O(m*n* alpha(m*n))
         for (i in 0..m - 1) {
             for (j in 0..n - 1) {
                 if (grid[i][j] == 1) {
@@ -297,8 +301,8 @@ class DisjointSetUnions {
         }
 
         var connectedComp = 0
-        for (root in dsu.parent) {
-            if (root == -1)
+        for (root in 0..n * m - 1) {
+            if (root == dsu.find(root))
                 connectedComp++
         }
     }
@@ -379,7 +383,7 @@ class DisjointSetUnions {
      * A stone can be removed if it shares either the same row or the same column as another stone that has not been removed.
      *
      * Given an array stones of length n where stones[i] = [xi, yi] represents the location of the ith stone,
-     * return the largest possible number of stones that can be removed.
+     * return the largest possible number of stones that can be removed so that there are no stones sharing.
      *
      *
      *
@@ -420,8 +424,10 @@ class DisjointSetUnions {
     fun removeStones(stones: Array<IntArray>): Int {
         /*
         Each stone is represented by a node, whose initial "parent" is itself, indicating that it is initially in its own connected component.
-        Iterate over all stones. For each stone (x, y), unify the component containing x with the component containing y + n (we offset y by n to avoid collisions between row and column indices as they could be the same).
-        After all stones have been iterated over, we count unique representatives of the connected components which are the parent nodes for the rows and columns.
+        Iterate over all stones. For each stone (x, y), unify the component containing x with the component containing y + n
+        (we offset y by n to avoid collisions between row and column indices as they could be the same).
+        After all stones have been iterated over, we count unique representatives of the connected components which are the parent nodes
+        for the rows and columns.
         The answer is the total number of stones minus the number of unique representatives (connected components).
 
 
@@ -753,22 +759,31 @@ class DisjointSetUnions {
     fun minCostConnectPoints(points: Array<IntArray>): Int {
         val n = points.size
         val edges = mutableListOf<Triple<Int, Int, Int>>()
+
+        // Generate all edges with their Manhattan distance as cost
         for (i in 0 until n) {
             for (j in i + 1 until n) {
                 val (x1, y1) = points[i]
                 val (x2, y2) = points[j]
-                val cost = Math.abs(x1 - x2) + Math.abs(y1 - y2)
-                edges.add(Triple(i, j, cost))
+                val cost = kotlin.math.abs(x1 - x2) + kotlin.math.abs(y1 - y2)
+                edges.add(Triple(i, j, cost)) // we consider the edge as i,j and cost
             }
         }
+
+        // Sort edges by cost
         edges.sortBy { it.third }
+
+        // Initialize DSU for Kruskal's algorithm
         val dsu = DSU(n)
         var res = 0
+
+        // Process edges in ascending order of cost
         for ((u, v, cost) in edges) {
-            if (dsu.union(u, v)) {
+            if (dsu.union(u, v)) { // Add edge if it doesn't form a cycle
                 res += cost
             }
         }
+
         return res
     }
 

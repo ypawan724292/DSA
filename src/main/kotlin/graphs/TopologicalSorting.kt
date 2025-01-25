@@ -408,6 +408,7 @@ class TopologicalSorting {
                         add(u)
                     }
                     inDegree[u] = inDegree.getOrDefault(u, 0) + 1
+                    break
                 }
             }
         }

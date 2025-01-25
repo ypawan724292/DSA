@@ -199,7 +199,7 @@ class WeightedBFS {
      * 3. if weights are small use -> 1-K BFS or Dial Algorithm
      * 4. if weights are large use -> dijkstra
      * 5. if with negative weights use -> bellman-ford
-     * 6. if all pairs shortest path use -> floyd-warshall
+     * 6. if all pairs shortest path use -> floyd-warshall {multiple sources}
      */
 
 }
