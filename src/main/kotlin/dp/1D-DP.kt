@@ -37,6 +37,8 @@ class `1-DP` {
             return memo[i]
         }
 
+        // return f(n)
+
         //Iterative {bottom-up} and tabulation
         val dp = IntArray(n + 1)
         for (i in 0..n) {
@@ -47,6 +49,8 @@ class `1-DP` {
             }
         }
 
+        // return dp[n]
+
         //space optimized
         var a = 0
         var b = 1
@@ -56,7 +60,7 @@ class `1-DP` {
             b = temp
         }
 
-        return a
+        return b
     }
 
     /**
@@ -99,6 +103,8 @@ class `1-DP` {
             return memo[i]
         }
 
+        // return f(n)
+
         // iterative {bottom-up} and tabulation
         val dp = IntArray(n + 1)
         for (i in 0..n) {
@@ -107,6 +113,8 @@ class `1-DP` {
                 else -> dp[i] = dp[i - 1] + dp[i - 2]
             }
         }
+
+        // return dp[n]
 
         //space optimized
         var a = 1
@@ -117,7 +125,7 @@ class `1-DP` {
             b = temp
         }
 
-        return a
+        return b
     }
 
     /**
@@ -197,8 +205,9 @@ class `1-DP` {
         // recursive {top-down} and memoization
         val memo = IntArray(n) { -1 }
         fun f(i: Int): Int {
-            if (i == 0) return 0
-            if (i == 1) return Math.abs(height[1] - height[0])
+            if (i == 0) return 0 //because the frog does not jump to the first stone; it starts there.
+            if (i == 1) return Math.abs(height[1] - height[0]) // The frog can only arrive at the second stone (index 1)
+            // by a single jump from the first stone. Thus, no additional options need to be considered.
 
             if (memo[i] != -1) return memo[i]
             val jumpOne = Math.abs(height[i] - height[i - 1]) + f(i - 1)
@@ -359,58 +368,15 @@ class `1-DP` {
      */
     fun maxMoneyRobbed(arr: IntArray): Int {
         val n = arr.size
-        // recursive {top-down} and memoization
-        val memo = IntArray(n) { -1 }
-        fun f(i: Int, j: Int): Int {
-            if (i > j) return 0
-            if (i == 0) return arr[0]
-            if (i == 1) return maxOf(arr[0], arr[1])
+        val arr1 = IntArray(n - 1)
+        val arr2 = IntArray(n - 1)
 
-            if (memo[i] != -1) return memo[i]
-
-            val take = arr[i] + f(i - 2, j)
-            val notTake = 0 + f(i - 1, j)
-
-            memo[i] = maxOf(take, notTake)
-            return memo[i]
-        }
-//        return maxOf(f(0, n - 2), f(1, n - 1))
-
-
-        //iterative {bottom-up} and tabulation
-
-        fun h(l: Int, r: Int): Int {
-            val dp = IntArray(n)
-            for (i in l..r) {
-                when (i) {
-                    0 -> dp[i] = arr[0]
-                    1 -> dp[i] = maxOf(arr[0], arr[1])
-                    else -> {
-                        val take = arr[i] + dp[i - 2]
-                        val notTake = 0 + dp[i - 1]
-                        dp[i] = maxOf(take, notTake)
-                    }
-                }
-            }
-            return dp[n - 1]
-        }
-//        return maxOf(h(0, n - 2), h(1, n - 1))
-
-        //space optimized
-        fun g(l: Int, r: Int): Int {
-            var a = arr[l]
-            var b = maxOf(arr[l], arr[l + 1])
-            for (i in l + 2..r) {
-                val take = arr[i] + a
-                val notTake = b
-                val cur = maxOf(take, notTake)
-                a = b
-                b = cur
-            }
-            return b
+        for (i in 0 until n) {
+            if (i != n - 1) arr1[i] = arr[i]
+            if (i != 0) arr2[i] = arr[i]
         }
 
-        return maxOf(g(0, n - 2), g(1, n - 1))
+        return maxOf(maxSumNoAdjacent(arr1), maxSumNoAdjacent(arr2))
     }
 
 

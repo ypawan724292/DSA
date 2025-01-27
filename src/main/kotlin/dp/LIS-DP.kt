@@ -76,6 +76,7 @@ class `LIS-DP` {
      * Printing the LIS
      */
     fun printLIS(arr: IntArray) {
+        //TC : O(n^2)
         val n = arr.size
         val dp = IntArray(n) { 1 }
         val prev = IntArray(n) { -1 }

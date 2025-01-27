@@ -158,6 +158,10 @@ class `String-DP` {
 
     /**
      * Longest Palindrome Subsequence
+     *
+     * Example:
+     * str = "agbcba" , str.reversed() = "abcbga"
+     * LCS = "abcba" => 5
      */
     fun longestPalindromeSubsequence(str: String): Int {
         /**
@@ -202,6 +206,11 @@ class `String-DP` {
         2. minInsertions = str1.length - LCS
         3. minDeletions = str2.length - LCS
         4 minInsertions + minDeletions = str1.length + str2.length - 2 * LCS
+
+        Example:
+            str1 = "heap" , str2 = "pea"
+            LCS = "ea" => 2
+
          */
         val lcs = longestCommonSubsequence(str1, str2)
         return str1.length - lcs + str2.length - lcs
@@ -286,7 +295,7 @@ class `String-DP` {
      *
      * Example:
      * S1 = "rabbbit" , S2 = "rabbit"
-     * Distinct Subsequences = 3
+     * Distinct Subsequences = 3 , ie "rabbit", "rabbit", "rabbit"
      * Explanation: There are 3 distinct subsequences of S2 in S1, they are highlighted below
      */
     fun distinctSubsequences(str1: String, str2: String): Int {
@@ -512,9 +521,7 @@ class `String-DP` {
                 f(i - 1, j - 1)
             } else if (p[j - 1] == '*') {
                 val zero = f(i, j - 1) // zero occurrences of '.' // 'character before *'
-                val one = (s[i - 1] == p[j - 2] || p[j - 2] == '.') && f(
-                    i - 1, j
-                ) // one or more occurrences of '.'// 'any number of preceding element'
+                val one = (s[i - 1] == p[j - 2] || p[j - 2] == '.') && f(i - 1, j) // one or more occurrences of '.'// 'any number of preceding element'
                 zero || one
             } else {
                 false

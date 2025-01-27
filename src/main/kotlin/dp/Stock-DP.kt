@@ -26,6 +26,7 @@ class `Stock-Dp` {
 //        return res
 
 
+        // using  dp
         var maxProfit = 0;
         var mini = prices[0];
 
@@ -48,8 +49,11 @@ class `Stock-Dp` {
      *
      * We can buy and sell the stock any number of times.
      * In order to sell the stock, we need to first buy it on the same or any previous day.
-     * We can’t buy a stock again after buying it once. In other words, we first buy a stock and then sell it. After selling we can buy and sell again.
+     * We can’t buy a stock again after buying it once.
+     * In other words, we first buy a stock and then sell it. After selling we can buy and sell again.
      * But we can’t sell before buying and can’t buy before selling any previously bought stock.
+     *
+     * We need to tell the maximum profit one can get by buying and selling this stock.
      *
      */
     fun maxProfit(prices: IntArray): Int {
@@ -287,13 +291,13 @@ class `Stock-Dp` {
             if (memo[i][j] != -1) return memo[i][j]
             memo[i][j] = if (j % 2 == 0) {
                 maxOf(
-                    -prices[i] + backtrack(i - 1, j + 1),
-                    0 + backtrack(i - 1, j)
+                    -prices[i] + backtrack(i + 1, j + 1),
+                    0 + backtrack(i + 1, j)
                 )
             } else {
                 maxOf(
-                    prices[i] + backtrack(i - 1, j + 1),
-                    0 + backtrack(i - 1, j)
+                    prices[i] + backtrack(i + 1, j + 1),
+                    0 + backtrack(i + 1, j)
                 )
             }
 
@@ -368,6 +372,8 @@ class `Stock-Dp` {
      * We can’t buy a stock again after buying it once. In other words, we first buy a stock and then sell it.
      * After selling we can buy and sell again. But we can’t sell before buying and can’t buy before selling any previously bought stock.
      * We can’t buy a stock on the very next day of selling it. This is the cooldown clause.
+     *
+     * We need to tell the maximum profit one can get by buying and selling this stock.
      */
     fun maxProfitCooldown(prices: IntArray): Int {
         val n = prices.size
@@ -455,6 +461,8 @@ class `Stock-Dp` {
      * In order to sell the stock, we need to first buy it on the same or any previous day.
      * We can’t buy a stock again after buying it once. In other words, we first buy a stock and then sell it. After selling we can buy and sell again. But we can’t sell before buying and can’t buy before selling any previously bought stock.
      * After every transaction, there is a transaction fee (‘fee’) associated with it.
+     *
+     * We need to tell the maximum profit one can get by buying and selling this stock.
      */
     fun maxProfitWithFee(prices: IntArray, fee: Int): Int {
         val n = prices.size

@@ -357,8 +357,6 @@ class Problems {
     }
 
 
-
-
     /**
      * Longest Sub-Array with Sum K
      * Difficulty: MediumAccuracy: 24.64%Submissions: 494K+Points: 4
@@ -417,4 +415,60 @@ class Problems {
         return max
     }
 
+    /**
+     *  Given the array and queries where each query consists of two integers left and right,
+     *  return the sum of the subarray sum of the given range.
+     *
+     * Example:
+     * Input: arr = [1, 2, 3, 4, 5], queries = [[1, 3], [0, 1], [2, 4]]
+     * Output: [9, 3, 12]
+     */
+    fun rangeSumQuery(arr: IntArray, queries: Array<IntArray>): IntArray {
+        val n = arr.size
+        val prefixSum = IntArray(n)
+        prefixSum[0] = arr[0]
+
+        for (i in 1 until n) {
+            prefixSum[i] = prefixSum[i - 1] + arr[i]
+        }
+
+        val results = IntArray(queries.size)
+        for (i in queries.indices) {
+            val query = queries[i]
+            val left = query[0]
+            val right = query[1]
+
+            results[i] = if (left == 0) {
+                prefixSum[right]
+            } else {
+                prefixSum[right] - prefixSum[left - 1]
+            }
+        }
+
+        return results
+    }
+
+    /**
+     * Problem: Find an index in an array such that the sum of elements to the left of the index is equal to the sum
+     * of elements to the right of the index.
+     *
+     * Example:
+     * Input: [-7, 1, 5, 2, -4, 3, 0]
+     * Output: 3
+     */
+    fun findEquilibriumIndex(arr: IntArray): Int {
+        val n = arr.size
+        val totalSum = arr.sum()
+        var leftSum = 0
+
+        for (i in 0 until n) {
+            val rightSum = totalSum - leftSum - arr[i]
+            if (leftSum == rightSum) {
+                return i
+            }
+            leftSum += arr[i]
+        }
+
+        return -1 // If no equilibrium index is found
+    }
 }

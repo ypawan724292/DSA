@@ -568,7 +568,6 @@ class `SubSequence-DP` {
         fun f(i: Int, w: Int): Int {
             if (w == 0) return 0
             //bound knapsack when we only one item to take
-//            if (i == 0) return if (wt[i] == w) val[i] else 0
             if (i == 0) {
                 //bcuz we have infinite supply of items
                 return w / wt[i] * price[i]

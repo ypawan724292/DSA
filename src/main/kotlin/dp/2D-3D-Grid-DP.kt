@@ -178,7 +178,7 @@ class `2D-3D-Grid-DP` {
         // recursive {top - down} and memo
         val memo = Array(m) { IntArray(n) { -1 } }
         fun f(i: Int, j: Int): Int {
-            if (i > 0 && j > 0 && maze[i][j] == -1) return 0
+            if ( maze[i][j] == -1) return 0
             if (i == 0 && j == 0) return 1
             if (memo[i][j] != -1) return memo[i][j]
             var up = 0
