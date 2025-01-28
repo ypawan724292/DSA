@@ -19,6 +19,7 @@ class `2D-3D-Grid-DP` {
         val n = points.size
         // recursive {top -down}  and memo
         //here we also have 4 choice , we can pick any of the 3 activities or we can skip the current day
+        // TC : O(4^n) bcuz at each day we have 4 choices
         val memo = Array(n) { IntArray(4) { -1 } }
         fun f(i: Int, j: Int): Int {
             if (i == 0) {
@@ -122,6 +123,7 @@ class `2D-3D-Grid-DP` {
      */
     fun uniquePaths(m: Int, n: Int): Int {
         // recursive {bottom-up} and memo
+        // TC : O(2^(m+n)) bcuz at each cell we have 2 choices
         val memo = Array(m) { IntArray(n) { -1 } }
         fun f(i: Int, j: Int): Int {
             if (i < 0 || j < 0) return 0
@@ -135,6 +137,7 @@ class `2D-3D-Grid-DP` {
 
         //tabulation bottom-up and iterative
         val dp = Array(m) { IntArray(n) { 0 } }
+        // TC : O(m*n)
         for (i in 0..m - 1) {
             for (j in 0..n - 1) {
                 if (i == 0 && j == 0) {
@@ -176,9 +179,10 @@ class `2D-3D-Grid-DP` {
         val m = maze.size
         val n = maze[0].size
         // recursive {top - down} and memo
+        //TC : O(2^(m+n)) bcuz at each cell we have 2 choices
         val memo = Array(m) { IntArray(n) { -1 } }
         fun f(i: Int, j: Int): Int {
-            if ( maze[i][j] == -1) return 0
+            if (maze[i][j] == -1) return 0
             if (i == 0 && j == 0) return 1
             if (memo[i][j] != -1) return memo[i][j]
             var up = 0
@@ -190,6 +194,7 @@ class `2D-3D-Grid-DP` {
         }
 
         //tabulation - bottom up and iterative
+        // TC : O(m*n)
         val dp = Array(m) { IntArray(n) { 0 } }
         for (i in 0..m - 1) {
             for (j in 0..n - 1) {
@@ -252,6 +257,7 @@ class `2D-3D-Grid-DP` {
         val m = grid.size
         val n = grid[0].size
         // recursive {top - down} and memo
+        // TC : O(2^(m+n)) bcuz at each cell we have 2 choices
         val memo = Array(m) { IntArray(n) { -1 } }
         fun f(i: Int, j: Int): Int {
             if (i == 0 && j == 0) return grid[i][j]
@@ -322,6 +328,7 @@ class `2D-3D-Grid-DP` {
     fun minPathSumInTriangle(triangle: List<List<Int>>): Int {
         val n = triangle.size
         // recursive {top - down} and memo
+        // TC : O(2^n) bcuz at each cell we have 2 choices
         val memo = Array(n) { IntArray(n) { -1 } }
         fun f(i: Int, j: Int): Int {
             if (i == n - 1) return triangle[i][j]
@@ -378,6 +385,8 @@ class `2D-3D-Grid-DP` {
 
         // recursive {top - down} and memo
         val memo = Array(m) { IntArray(n) { -1 } }
+
+        // TC : O(3^n) bcuz at each cell we have 3 choices
         fun f(i: Int, j: Int): Int {
             if (i == 0) return matrix[i][j]
             if (memo[i][j] != -1) return memo[i][j]
@@ -395,7 +404,8 @@ class `2D-3D-Grid-DP` {
 
 //        return res
 
-        // tabulation {bottom-up} and iterative
+        // tabulation {bottom-up} and
+        // TC : O(m*n*n)
         val dp = Array(m) { IntArray(n) { 0 } }
         for (i in 0..m - 1) {
             for (j in 0..n - 1) {
@@ -460,6 +470,8 @@ class `2D-3D-Grid-DP` {
 
         // recursive {top - down} and memo
         val memo = Array(m) { Array(n) { IntArray(n) { -1 } } }
+
+        // TC : O(3^m) bcuz at each cell we have 3 choices
         fun f(i: Int, j1: Int, j2: Int): Int {
             if (i == 0) {
                 return if (j1 == j2) matrix[i][j1]
@@ -470,8 +482,8 @@ class `2D-3D-Grid-DP` {
             for (d1 in -1..1) {
                 for (d2 in -1..1) {
                     if (j1 + d1 in 0..n - 1 && j2 + d2 in 0..n - 1) {
-                        val pick = if (j1 == j2) matrix[i][j1] + f(i - 1, j1 + d1, j2 + d2)
-                        else matrix[i][j1] + matrix[i][j2] + f(i - 1, j1 + d1, j2 + d2)
+                        var pick = if (j1 == j2) matrix[i][j1] else matrix[i][j1] + matrix[i][j2]
+                        pick += f(i - 1, j1 + d1, j2 + d2)
                         maxi = maxOf(maxi, pick)
                     }
                 }
@@ -483,6 +495,7 @@ class `2D-3D-Grid-DP` {
 //        return f(m - 1, 0, n - 1)
 
         // tabulation {bottom-up} and iterative
+        // TC
         val dp = Array(m) { Array(n) { IntArray(n) { 0 } } }
         for (i in 0..m - 1) {
             for (j1 in 0..n - 1) {

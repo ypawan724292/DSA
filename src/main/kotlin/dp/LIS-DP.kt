@@ -5,6 +5,34 @@ import annotations.Important
 class `LIS-DP` {
 
     /**
+     * Longest Increasing Subsequence with Binary Search
+     * TC : O(nlogn)
+     */
+    fun LISUsingBS(arr: IntArray): Int {
+        val n = arr.size
+        val dp = IntArray(n) { 0 }
+        var len = 0
+        for (i in 0 until n) {
+            var l = 0
+            var r = len
+            while (l < r) {
+                val mid = l + (r - l) / 2
+                if (dp[mid] < arr[i]) {
+                    l = mid + 1
+                } else {
+                    r = mid
+                }
+            }
+            dp[l] = arr[i]
+            if (l == len) {
+                len++
+            }
+        }
+
+        return len
+    }
+
+    /**
      * Longest Increasing Subsequence
      */
     fun LIS(arr: IntArray): Int {
@@ -73,6 +101,41 @@ class `LIS-DP` {
     }
 
     /**
+     * Count no of LIS
+     *
+     *
+     * Example Consider the array [1, 3, 5, 4, 7].
+     * dp and count are initialized to [1, 1, 1, 1, 1].
+     * Processing 3: dp[1] = 2, count[1] = 1 (extends 1)
+     * Processing 5: dp[2] = 3, count[2] = 1 (extends 1, 3)
+     * Processing 4: dp[3] = 3, count[3] = 1 (extends 1, 3), but also count[3] += count[2] = 2 (another subsequence of length 3)
+     * Processing 7: dp[4] = 4, count[4] = count[2] + count[3] = 3 (extends 1, 3, 5 and 1, 3, 4)
+     * The length of the LIS is 4.
+     * The total number of LIS is count[4] = 3. In summary, the intuition behind counting the LIS is to keep track of the number
+     * of ways to reach each element with an increasing subsequence of a specific length, and then accumulate these counts to
+     * find the total number of longest increasing subsequences. I hope this explanation helps! Let me know if you have any other questions.
+     */
+    fun countNoOfLIS(arr: IntArray): Int {
+        val n = arr.size
+        val dp = IntArray(n) { 1 }
+        val count = IntArray(n) { 1 }
+        for (i in 0..n - 1) {
+            for (j in 0..i - 1) {
+                if (arr[i] > arr[j]) {
+                    if (dp[i] == 1 + dp[j])
+                        count[i] += count[j]
+                    else if (dp[i] < dp[j] + 1) {
+                        dp[i] = 1 + dp[j]
+                        count[i] = count[j]
+                    }
+                }
+            }
+        }
+
+        return count.max()
+    }
+
+    /**
      * Printing the LIS
      */
     fun printLIS(arr: IntArray) {
@@ -102,33 +165,48 @@ class `LIS-DP` {
         println(lis)
     }
 
-
     /**
-     * Longest Increasing Subsequence with Binary Search
+     * Maximum Sum Increasing Subsequence
      */
-    fun LISUsingBS(arr: IntArray): Int {
+    fun MSIS(arr: IntArray): Int {
         val n = arr.size
-        val dp = IntArray(n) { 0 }
-        var len = 0
+        val dp = IntArray(n) { arr[it] }
         for (i in 0 until n) {
-            var l = 0
-            var r = len
-            while (l < r) {
-                val mid = l + (r - l) / 2
-                if (dp[mid] < arr[i]) {
-                    l = mid + 1
-                } else {
-                    r = mid
+            for (j in 0 until i) {
+                if (arr[i] > arr[j]) {
+                    dp[i] = maxOf(dp[i], arr[i] + dp[j])
                 }
             }
-            dp[l] = arr[i]
-            if (l == len) {
-                len++
+        }
+        return dp.maxOrNull()!!
+    }
+
+    fun printMSIS(array: IntArray): IntArray {
+        val n = array.size
+        val dp = IntArray(n) { array[it] }
+        val prev = IntArray(n) { -1 }
+        var maxIndex = 0
+        for (i in 0 until n) {
+            for (j in 0 until i) {
+                if (array[i] > array[j] && dp[i] < array[i] + dp[j]) {
+                    dp[i] = array[i] + dp[j]
+                    prev[i] = j
+                }
+            }
+            if (dp[i] > dp[maxIndex]) {
+                maxIndex = i
             }
         }
-
-        return len
+        val lis = mutableListOf<Int>()
+        var k = maxIndex
+        while (k >= 0) {
+            lis.add(array[k])
+            k = prev[k]
+        }
+        lis.reverse()
+        return lis.toIntArray()
     }
+
 
     /**
      * Given an integer n, return the least number of perfect square numbers that sum to n.
@@ -170,17 +248,24 @@ class `LIS-DP` {
 
     /**
      * Longest Divisible Subset
+     *
+     * Example :
+     * Input: nums = [1,2,3]
+     * Output: [1,2] (of course, [1,3] will also be ok)
+     *
+     * Input: nums = [1,2,4,8,3]
+     * Output: [1,2,4,8]
+     *
      */
     fun LDS(nums: IntArray): List<Int> {
-        nums.toSet()
-        nums.sort()
+        val arr = nums.toSet().sortedBy { it }
         val n = nums.size
         val pos = IntArray(n) { -1 }
         val dp = IntArray(n) { 1 }
         var maxLen = 1
         for (i in 0 until n) {
             for (j in 0 until i) {
-                if (nums[i] % nums[j] == 0) {
+                if (arr[i] % arr[j] == 0) {
                     dp[i] = maxOf(dp[i], 1 + dp[j])
                     pos[i] = j
                 }
@@ -191,7 +276,7 @@ class `LIS-DP` {
         var k = dp.indexOf(maxLen)
         val res = mutableListOf<Int>()
         while (k != -1) {
-            res.add(nums[k])
+            res.add(arr[k])
             k = pos[k]
         }
 
@@ -249,28 +334,6 @@ class `LIS-DP` {
         return res
     }
 
-    /**
-     * Count no of LIS
-     */
-    fun countNoOfLIS(arr: IntArray): Int {
-        val n = arr.size
-        val dp = IntArray(n) { 1 }
-        val count = IntArray(n) { 1 }
-        for (i in 0..n - 1) {
-            for (j in 0..i - 1) {
-                if (arr[i] > arr[j]) {
-                    if (dp[i] == 1 + dp[j])
-                        count[i] += count[j]
-                    else if (dp[i] < dp[j] + 1) {
-                        dp[i] = 1 + dp[j]
-                        count[i] = count[j]
-                    }
-                }
-            }
-        }
-
-        return count.max()!!
-    }
 
     /**
      * Longest String Chain
@@ -327,11 +390,14 @@ class `LIS-DP` {
 
 
     /**
-     * You are given a set of N types of rectangular 3-D boxes, where the ith box has height h, width w and length l. Your task is to create a stack of boxes which is as tall as possible, but you can only stack a box on top of another box if the dimensions of the 2-D base of the lower box are each strictly larger than those of the 2-D base of the higher box. Of course, you can rotate a box so that any side functions as its base.It is also allowable to use multiple instances of the same type of box. Your task is to complete the function maxHeight which returns the height of the highest possible stack so formed.
+     * You are given a set of N types of rectangular 3-D boxes, where the ith box has height h, width w and length l.
+     * Your task is to create a stack of boxes which is as tall as possible, but you can only stack a box on top of another box if the dimensions of the 2-D base of the lower box are each strictly larger than those of the 2-D base of the higher box. Of course, you can rotate a box so that any side functions as its base.It is also allowable to use multiple instances of the same type of box. Your task is to complete the function maxHeight which returns the height of the highest possible stack so formed.
      *
      *
      * Note:
-     * Base of the lower box should be strictly larger than that of the new box we're going to place. This is in terms of both length and width, not just in terms of area. So, two boxes with same base cannot be placed one over the other.
+     * Base of the lower box should be strictly larger than that of the new box we're going to place.
+     * This is in terms of both length and width, not just in terms of area.
+     * So, two boxes with same base cannot be placed one over the other.
      *
      *
      *

@@ -205,7 +205,7 @@ class `String-DP` {
         1. Find all the LCS of the two strings
         2. minInsertions = str1.length - LCS
         3. minDeletions = str2.length - LCS
-        4 minInsertions + minDeletions = str1.length + str2.length - 2 * LCS
+        4  minInsertions + minDeletions = str1.length + str2.length - 2 * LCS
 
         Example:
             str1 = "heap" , str2 = "pea"
@@ -343,6 +343,9 @@ class `String-DP` {
     }
 
     /**
+     *
+     * Edit Distance :(Levenshtein distance)
+     *
      * Convert S1 to S2 in minimum operations with below possible operations
      * 1. Insert a character
      * 2. Delete a character
@@ -354,9 +357,15 @@ class `String-DP` {
      * replace 'h' with 'r' in s1
      * deleter r, e in s1, remaining s1 = "ros"
      * Minimum operations = 3
+     *
+     *
+     * Note : Problem 1 is often used in scenarios where you want to find the similarity between two strings
+     * based on insertions and deletions,
+     * while Problem 2 is used in scenarios where you want to find the minimum number of edits (including replacements)
+     * to transform one string into another. Example: "horse" to "ros"
      */
     @Important
-    fun minOperationsToConvertS1ToS2(str1: String, str2: String): Int {
+    fun editDistance(str1: String, str2: String): Int {
         val m = str1.length
         val n = str2.length
 
@@ -439,7 +448,9 @@ class `String-DP` {
             memo[i][j] = if (str1[i - 1] == str2[j - 1] || str1[i - 1] == '?') {
                 f(i - 1, j - 1)
             } else if (str1[i - 1] == '*') {
-                f(i - 1, j) || f(i, j - 1)
+                val noTake = f(i - 1, j) // taking the character before * in the next iteration other charecters are matched with *
+                val take = f(i, j - 1) // not taking the character before *
+                take || noTake
             } else {
                 false
             }

@@ -7,7 +7,7 @@ class `Stock-Dp` {
      *We can buy and sell a stock only once.
      * We can buy and sell the stock on any day but to sell the stock, we need to first buy it on the same or any previous day.
      * We need to tell the maximum profit one can get by buying and selling this stock.
-     *
+     * Only one transaction is allowed.
      * In this we can buy and sell the stock only once.
      */
     fun bestTimeToBuyAndSellStock(prices: IntArray): Int {
@@ -23,19 +23,8 @@ class `Stock-Dp` {
             j++
         }
 
-//        return res
+        return res
 
-
-        // using  dp
-        var maxProfit = 0;
-        var mini = prices[0];
-
-        for (i in 1..prices.lastIndex) {
-            val curProfit = prices[i] - mini;
-            maxProfit = Math.max(maxProfit, curProfit);
-            mini = Math.min(mini, prices[i]);
-        }
-        return maxProfit;
     }
 
 
@@ -54,6 +43,8 @@ class `Stock-Dp` {
      * But we can’t sell before buying and can’t buy before selling any previously bought stock.
      *
      * We need to tell the maximum profit one can get by buying and selling this stock.
+     *
+     * Unlimited transactions are allowed, but you must sell before buying again.
      *
      */
     fun maxProfit(prices: IntArray): Int {
@@ -142,7 +133,7 @@ class `Stock-Dp` {
      *
      * Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
      *
-     *
+     * Unlimited transactions are allowed, but you must sell before buying again.
      *
      * Example 1:
      *
@@ -283,6 +274,10 @@ class `Stock-Dp` {
         val n = prices.size
 
         //memoization
+        /*
+            For k transactions: You need 2*k + 1 states to alternate between buying and selling k times and account for the final profit state.
+            For 1 transaction: You only need 2 states because you only buy and sell once, and there's no need to track further actions.
+         */
         val memo = Array(n + 1) { IntArray(2 * k + 1) { -1 } }
         fun backtrack(i: Int, j: Int): Int {
             if (j == 2 * k) return 0
@@ -428,9 +423,9 @@ class `Stock-Dp` {
 
         //space optimized
         var prev: IntArray? = null
-        val cur = IntArray(2)
 
         for (i in n downTo 0) {
+            val cur = IntArray(2)
             for (buy in 1 downTo 0) {
                 if (i == n) {
                     cur[buy] = 0
@@ -451,7 +446,7 @@ class `Stock-Dp` {
             prev = cur
         }
 
-        return cur[0]
+        return prev!![0]
     }
 
     /**

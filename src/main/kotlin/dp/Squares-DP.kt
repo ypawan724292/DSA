@@ -1,5 +1,7 @@
 package dp
 
+import annotations.Revise
+
 class `Squares-Dp` {
     /**
      * Largest Area in a Histogram
@@ -10,7 +12,7 @@ class `Squares-Dp` {
         var res = Int.MIN_VALUE
         for (i in 0..n - 1) {
             var min = Int.MAX_VALUE
-            for (j in i..n - 1) {
+            for (j in 0..i) {
                 min = minOf(min, arr[j])
                 res = maxOf(res, min * (j - i + 1))
             }
@@ -56,8 +58,25 @@ class `Squares-Dp` {
     /**
      * Problem Statement: Given an n * m matrix of ones and zeros,
      * return how many square submatrices have all ones.
+     *
+     * Example 1:
+     * Input: matrix = [
+     * [0,1,1,1],
+     * [1,1,1,1],
+     * [0,1,1,1]]
+     *
+     * Output: 15
+     *
      */
     fun countSquares(matrix: Array<IntArray>): Int {
+
+        /*
+        * Intution:
+        * We will use the dynamic programming to solve this problem
+        * We will create a dp array of the same size as the matrix
+        * dp[i][j] will store the maximum size of the square submatrices ending at matrix[i][j]
+        *
+         */
         var res = 0
 
         val m = matrix.size
@@ -88,7 +107,8 @@ class `Squares-Dp` {
      * Topics
      * Companies
      * Hint
-     * Given a 2D grid of 0s and 1s, return the number of elements in the largest square subgrid that has all 1s on its border, or 0 if such a subgrid doesn't exist in the grid.
+     * Given a 2D grid of 0s and 1s, return the number of elements in the largest square subgrid that has all 1s on its border,
+     * or 0 if such a subgrid doesn't exist in the grid.
      *
      *
      *
@@ -108,6 +128,7 @@ class `Squares-Dp` {
      * 1 <= grid[0].length <= 100
      * grid[i][j] is 0 or 1
      */
+    @Revise
     fun largest1BorderedSquare(grid: Array<IntArray>): Int {
         val m = grid.size
         val n = grid[0].size

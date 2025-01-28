@@ -158,6 +158,7 @@ class `1-DP` {
                 Step 1: The cost to stand on step 1 is cost[1] = 15.
                 Even if you start at step 0 or step 1, you still incur the respective costs. This is why dp[0] is initialized to cost[0] and dp[1] is initialized to cost[1].
          */
+        // TC : O(2^n)
         val memo = IntArray(cost.size) { -1 }
         fun f(i: Int): Int {
             if (i == 0) return cost[0]
@@ -203,6 +204,7 @@ class `1-DP` {
     fun minEnergy(height: IntArray): Int {
         val n = height.size
         // recursive {top-down} and memoization
+        // TC : O(2^n)
         val memo = IntArray(n) { -1 }
         fun f(i: Int): Int {
             if (i == 0) return 0 //because the frog does not jump to the first stone; it starts there.
@@ -257,6 +259,7 @@ class `1-DP` {
     fun minEnergy(height: IntArray, k: Int): Int {
         val n = height.size
         // recursive {top-down} and memoization
+        // TC : O(k^n)
         val memo = IntArray(n) { -1 }
         fun f(i: Int): Int {
             if (i == 0) return 0
@@ -275,6 +278,7 @@ class `1-DP` {
 //        return f(n - 1)
 
         // iterative {bottom-up} and tabulation
+        // TC : O(n*k)
         val dp = IntArray(n)
         for (i in 0 until n) {
             when (i) {
@@ -311,6 +315,7 @@ class `1-DP` {
     fun maxSumNoAdjacent(arr: IntArray): Int {
         val n = arr.size
         // recursive {top-down} and memoization
+        // TC : O(2^n)
         val memo = IntArray(n) { -1 }
         fun f(i: Int): Int {
             if (i == 0) return arr[0]
@@ -344,6 +349,7 @@ class `1-DP` {
 //        return dp[n-1]
 
         //space optimized
+        // TC : O(n)
         var a = arr[0]
         var b = maxOf(arr[0], arr[1])
         for (i in 2 until n) {
@@ -367,6 +373,7 @@ class `1-DP` {
      *
      */
     fun maxMoneyRobbed(arr: IntArray): Int {
+        //TC : O(n)
         val n = arr.size
         val arr1 = IntArray(n - 1)
         val arr2 = IntArray(n - 1)
@@ -402,7 +409,8 @@ class `1-DP` {
      * The grouping (1, 11, 06) is invalid because "06" is not a valid code (only "6" is valid).
      * Note: there may be strings that are impossible to decode.
      *
-     * Given a string s containing only digits, return the number of ways to decode it. If the entire string cannot be decoded in any valid way, return 0.
+     * Given a string s containing only digits, return the number of ways to decode it.
+     * If the entire string cannot be decoded in any valid way, return 0.
      *
      * The test cases are generated so that the answer fits in a 32-bit integer.
      *
@@ -415,7 +423,7 @@ class `1-DP` {
         val memo = IntArray(n + 1) { -1 }
         fun f(i: Int): Int {
             if (i == n) return 1
-            if (str[i] == '0') return 0
+            if (str[i] == '0') return 0 // if the current character is '0', then it cannot be decoded
 
             if (memo[i] != -1) return memo[i]
 

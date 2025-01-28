@@ -241,7 +241,7 @@ class `SubSequence-DP` {
 
 
         var res = Int.MAX_VALUE
-        for (i in 0..sum / 2) {
+        for (i in 0..sum / 2) { // sum/2 bcuz the from sum/2 to sum yields same result
             if (prev!![i]) {
                 res = minOf(res, Math.abs(sum - 2 * i))
             }
@@ -260,6 +260,8 @@ class `SubSequence-DP` {
         // if 0 is included answer will be different
         val n = arr.size
         // recursive {top- down} and memoization
+        // f(i,k) denotes numbers of subsets with sum k with elements from n-1 to i
+        // TC : O(2^n)
         val mem0 = Array(n) { IntArray(k + 1) }
         fun f(i: Int, sum: Int): Int {
             if (sum == 0) return 1
@@ -418,6 +420,7 @@ class `SubSequence-DP` {
         //base (0,k)
         val memo = Array(n) { IntArray(target + 1) { -1 } }
 
+        // TC : O(2^n) we take or do not take
         fun f(i: Int, k: Int): Int {
             if (k == 0) return 0
             if (i == 0) {
@@ -430,7 +433,7 @@ class `SubSequence-DP` {
 
             var take = Int.MAX_VALUE
             if (nums[i] <= k) {
-                take =1+ f(i, k - nums[i])
+                take = 1 + f(i, k - nums[i])
             }
 
             memo[i][k] = minOf(take, noTake)
@@ -440,6 +443,7 @@ class `SubSequence-DP` {
 //        return f(n-1, target)
 
         //tabulation {bottom-up}
+        // TC : O(n*target)
         val dp = Array(n) { IntArray(target + 1) }
         for (i in 0 until n) {
             for (j in 0..target) {
@@ -459,15 +463,16 @@ class `SubSequence-DP` {
         }
 
         //space optimized
-        val cur = IntArray(target + 1)
+        var prev: IntArray? = null
         for (i in 0 until n) {
+            val cur = IntArray(target + 1)
             for (j in 0..target) {
                 if (j == 0) {
                     cur[j] = 0
                 } else if (i == 0) {
                     cur[j] = if (j % nums[i] == 0) j / nums[i] else Int.MAX_VALUE
                 } else {
-                    val noTake = cur[j]
+                    val noTake = prev!![j]
                     var take = Int.MAX_VALUE
                     if (nums[i] <= j) {
                         take = cur[j - nums[i]]
@@ -475,9 +480,10 @@ class `SubSequence-DP` {
                     cur[j] = minOf(take, noTake)
                 }
             }
+            prev = cur
         }
 
-        return cur[target]
+        return prev!![target]
 
     }
 
@@ -557,7 +563,8 @@ class `SubSequence-DP` {
      * A thief wants to rob a store. He is carrying a bag of capacity W. The store has ‘n’ items of infinite supply.
      * Its weight is given by the ‘wt’ array and its value by the ‘val’ array.
      * He can either include an item in its knapsack or exclude it but can’t partially have it as a fraction.
-     * We need to find the maximum value of items that the thief can steal. He can take a single item any number of times he wants and put it in his knapsack.
+     * We need to find the maximum value of items that the thief can steal.
+     * He can take a single item any number of times he wants and put it in his knapsack.
      *
      */
     fun knapsack(wt: IntArray, price: IntArray, W: Int): Int {
@@ -674,13 +681,13 @@ class `SubSequence-DP` {
         //tabulation {bottom-up}
 
         val dp = Array(n) { IntArray(n + 1) }
-        for( i in 0..n-1){
-            for(j in 0..n){
-                if(j == 0){
+        for (i in 0..n - 1) {
+            for (j in 0..n) {
+                if (j == 0) {
                     dp[i][j] = 0
-                }else if(i == 0){
+                } else if (i == 0) {
                     dp[i][j] = j / 1 * price[i]
-                }else{
+                } else {
                     val notCollect = dp[i - 1][j]
                     var collect = Int.MIN_VALUE
                     if (i <= j) {
@@ -691,7 +698,7 @@ class `SubSequence-DP` {
             }
         }
 
-        return dp[n-1][n]
+        return dp[n - 1][n]
     }
 }
 

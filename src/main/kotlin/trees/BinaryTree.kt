@@ -168,7 +168,7 @@ class BinaryTree {
             if (node == null) return 0
             val left = dfs(node.left)
             val right = dfs(node.right)
-            diameter = maxOf(diameter, left + right)
+            diameter = maxOf(diameter, left + right - 1)
             return 1 + maxOf(left, right)
         }
         dfs(root)
@@ -327,11 +327,22 @@ class BinaryTree {
      *
      * Given the root of a binary tree, return the vertical order traversal of its nodes' values.
      *
+     * Vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index
+     * starting from the leftmost column and ending on the rightmost column.
+     *
      * Example 1:
      * Input:Binary Tree: 1 2 3 4 10 9 11 -1 5 -1 -1 -1 -1 -1 -1 -1 6
      *
      *
      * Output: [[4], [2], [1, 5, 6], [3], [10], [9], [11]]
+     *
+     * Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
+     *
+     * For each node at position (row, col), its left and right children will be at positions (row + 1, col - 1) and (row + 1, col + 1) respectively. The root of the tree is at (0, 0).
+     *
+     * The vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index starting from the leftmost column and ending on the rightmost column. There may be multiple nodes in the same row and same column. In such a case, sort these nodes by their values.
+     *
+     * Return the vertical order traversal of the binary tree.
      *
      */
     fun verticalOrder(root: TreeNode?): List<List<Int>> {
@@ -352,7 +363,41 @@ class BinaryTree {
         }
         for (i in min..max) {
             result.add(map[i]!!)
+            // if asked to sort the values in each column
+            // result.add(map[i]!!.sorted())
         }
+//        return result
+
+        val columnMap = mutableMapOf<Int, MutableList<Pair<Int, Int>>>()
+        val queue2 = ArrayDeque<Triple<TreeNode, Int, Int>>()
+        queue2.add(Triple(root, 0, 0))  // root, column, row
+
+        var minColumn = 0
+        var maxColumn = 0
+
+        // Perform BFS
+        while (queue.isNotEmpty()) {
+            val (node, row, col) = queue2.removeFirst()
+
+            // Store node with row index and value at the corresponding column index
+            columnMap.computeIfAbsent(col) { mutableListOf() }.add(Pair(row, node.value))
+
+            // Update min and max column indices
+            minColumn = minOf(minColumn, col)
+            maxColumn = maxOf(maxColumn, col)
+
+            // Add children with their respective positions
+            node.left?.let { queue2.add(Triple(it, row + 1, col - 1)) }
+            node.right?.let { queue2.add(Triple(it, row + 1, col + 1)) }
+        }
+
+
+        // Process each column from minColumn to maxColumn
+        for (col in minColumn..maxColumn) {
+            val columnNodes = columnMap[col]!!.sortedWith(compareBy({ it.first }, { it.second }))
+            result.add(columnNodes.map { it.second })  // Extract only node values
+        }
+
         return result
     }
 
@@ -521,10 +566,7 @@ class BinaryTree {
             }
         }
 
-
-
         return true
-
 
     }
 
@@ -550,7 +592,8 @@ class BinaryTree {
 
 
     /**
-     * Problem Statement: Given a Binary Tree and a reference to a root belonging to it. Return the path from the root node to the given leaf node.
+     * Problem Statement: Given a Binary Tree and a reference to a root belonging to it.
+     * Return the path from the root node to the given leaf node.
      *
      * No two nodes in the tree have the same data value.
      * It is assured that the given node is present and a path always exists.
@@ -602,10 +645,10 @@ class BinaryTree {
      *  LCA(1,2) = 6
      */
     @Important
-    fun findLowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
+    fun findLowestCommonAncestor(node: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
         /*
         Intuition:
-        // base case if root is null or root is equal to p or q, return root
+        // base case if node is null or node is equal to p or q, return node
 
         The LCA of p and q in a binary tree is the lowest node that has both p and q as descendants
          1. we will find the LCA of p and q in the left subtree
@@ -613,12 +656,13 @@ class BinaryTree {
             3. if left is null, return right
             4. if right is null, return left
             5. if left and right are not null, return root
+            TC: O(n) where n is no of nodes in the tree
          */
-        if (root == null || root == p || root == q) return root
-        val left = findLowestCommonAncestor(root.left, p, q)
-        val right = findLowestCommonAncestor(root.right, p, q)
+        if (node == null || node == p || node == q) return node
+        val left = findLowestCommonAncestor(node.left, p, q)
+        val right = findLowestCommonAncestor(node.right, p, q)
 
-        return if (left == null) right else if (right == null) left else root
+        return if (left == null) right else if (right == null) left else node
     }
 
     /**
@@ -627,6 +671,9 @@ class BinaryTree {
      * Problem Statement: Given a Binary Tree, return its maximum width.
      * The maximum width of a binary tree is the maximum number of nodes present at any level of the tree.
      *The width or diameter of a level is the number of nodes between the leftmost and rightmost nodes.
+     *
+     * Example 1:
+     *
      */
     fun maxWidthOfBinaryTree(root: TreeNode?): Int {
         if (root == null) return 0
@@ -845,12 +892,12 @@ class BinaryTree {
 
         // height of the left subtree
         fun leftHeight(node: TreeNode?): Int {
-          return if (node == null) 0 else 1 + leftHeight(node.left)
+            return if (node == null) 0 else 1 + leftHeight(node.left)
         }
 
         // TC : O(h^2)
         fun rightHeight(node: TreeNode?): Int {
-          return if (node == null) 0 else 1 + rightHeight(node.right)
+            return if (node == null) 0 else 1 + rightHeight(node.right)
         }
 
         fun f(node: TreeNode?): Int {
@@ -859,7 +906,7 @@ class BinaryTree {
             val right = rightHeight(node.right)
 
             if (left == right) {
-                return (1 shl left) -1// we can use left shift operator here bcuz 2^h = 1 << h, it has O(1) time complexity compared to Math.pow(2, h)
+                return (1 shl left) - 1// we can use left shift operator here bcuz 2^h = 1 << h, it has O(1) time complexity compared to Math.pow(2, h)
             }
             return 1 + f(node.left) + f(node.right)
         }
