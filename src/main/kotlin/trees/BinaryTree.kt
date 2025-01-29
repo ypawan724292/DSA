@@ -795,7 +795,6 @@ class BinaryTree {
             distance++
         }
 
-        queue.mapNotNull { it?.value }
         return result
     }
 
@@ -949,7 +948,7 @@ class BinaryTree {
      * is the preorder traversal of a binary tree and inorder is the
      * inorder traversal of the same tree, construct and return the binary tree.
      *
-     *Example 1:
+     * Example 1:
      * preOrder = [3,9,20,15,7]
      * inOrder = [9,3,15,20,7]
      *

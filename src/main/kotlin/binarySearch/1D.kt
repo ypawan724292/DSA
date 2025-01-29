@@ -364,76 +364,35 @@ class `1D` {
      */
     @Revise
     fun findRotationCount(arr: IntArray): Int {
-        var low = 0
-        var high = arr.lastIndex
-        var min = Int.MAX_VALUE
-        var i = -1
-        while (low <= high) {
-            val mid = low + (high - low) / 2
-
-            when {
-                arr[low] <= arr[high] -> {
-                    if (arr[low] < min) {
-                        i = low
-                    }
-                    break
-                }
-
-                arr[low] <= arr[mid] -> {
-                    if (arr[low] < min) {
-                        min = arr[low]
-                        i = low
-                    }
-                    low = mid + 1
-                }
-
-                else -> {
-                    if (arr[mid] < min) {
-                        min = arr[mid]
-                        i = mid
-                    }
-                    high = mid - 1
-                }
-            }
-
-        }
-        return i
-    }
-
-    /**
-     * Given an array of N integers.
-     * Every number in the array except one appears twice. Find the single number in the array.
-     *
-     * Example: [1,1,2,2,3,4,4]
-     * Output: 3
-     */
-    fun findSingleNumber(arr: IntArray): Int {
         val n = arr.size
-        if (n == 1) return arr[0]
-        if (arr[0] != arr[1]) return arr[0]
-        if (arr[n - 1] != arr[n - 2]) return arr[n - 1]
-        var low = 1
-        var high = arr.lastIndex - 1
+        var low = 0
+        var high = n - 1
 
         while (low <= high) {
-            val mid = low + (high - low) / 2
-            if (arr[mid] != arr[mid - 1] && arr[mid] != arr[mid + 1]) {
-                return arr[mid]
+            // If the array is sorted, the rotation count is 0
+            if (arr[low] <= arr[high]) {
+                return low
             }
 
-            // [1,1,2,2,3,4,4]
-            // [e,o,e,o,e,o,e]
-            //          ^
-            // we are in left if mid is even and arr[mid] == arr[mid + 1] or mid is odd and arr[mid] == arr[mid - 1]
-            // we are in right if mid is even and arr[mid] == arr[mid - 1] or mid is odd and arr[mid] == arr[mid + 1]
-            if (mid % 2 == 0 && arr[mid] == arr[mid + 1] || mid % 2 != 0 && arr[mid] == arr[mid - 1]) {
-                low = mid + 1
-            } else {
+            val mid = low + (high - low) / 2
+            val next = (mid + 1) % n
+            val prev = (mid + n - 1) % n
+
+            // Check if mid is the minimum element
+            if (arr[mid] <= arr[next] && arr[mid] <= arr[prev]) {
+                return mid
+            } else if (arr[mid] <= arr[high]) {
+                // Minimum element is in the left half
                 high = mid - 1
+            } else if (arr[mid] >= arr[low]) {
+                // Minimum element is in the right half
+                low = mid + 1
             }
         }
-        return -1
+
+        return 0 // Should not reach here in a valid rotated sorted array
     }
+
 
     /**
      * Find square root of a number
@@ -443,25 +402,28 @@ class `1D` {
      *  i*i<= x
      */
     fun findSqaureRoot(x: Int): Int {
+        if (x == 0 || x == 1) {
+            return x
+        }
         var low = 1
         var high = x
         var res = 0
 
         while (low <= high) {
-            val mid = (low + high) / 2
-            // mid*mid can be greater than Int.MAX_VALUE, instead
+            val mid = low + (high - low) / 2
+            val square = mid.toLong() * mid.toLong() // Use Long to avoid overflow
+
             when {
-                mid <= x / mid -> {
-                    res = mid
+                square == x.toLong() -> return mid
+                square <= x -> {
                     low = mid + 1
+                    res = mid
                 }
 
-                else -> {
-                    high = mid - 1
-                }
+                else -> high = mid - 1
             }
         }
-        return res
+        return high
     }
 
     /**

@@ -274,6 +274,9 @@ class BST {
 
     /**
      * Construct a BST from preorder traversal
+     *
+     * Example:
+     * Input: preorder = [8,5,1,7,10,12]
      */
     fun constructBSTFromPreorder(preorder: IntArray): TreeNode? {
         /*
@@ -299,6 +302,22 @@ class BST {
 
     /**
      * Inorder Successor/Predecessor in BST
+     *
+     * Inorder Successor: The inorder successor of a node in a BST is the node that has the smallest value greater than the value of the node.
+     *
+     * Example:
+     *                     6
+     *                   / \
+     *                  4   8
+     *                 / \  / \
+     *                3   5 7  9
+     *
+     *
+     * Inorder traversal of the above tree is 3,4,5,6,7,8,9
+     * Inorder Successor of 4 is 5
+     * InOrder Predecessor of 4 is 3
+     *
+     * Predecessor: The inorder predecessor of a node in a BST is the node that has the largest value smaller than the value of the node.
      *
      */
     fun inorderSuccessor(root: TreeNode?, target: TreeNode): Pair<TreeNode?, TreeNode?> {
@@ -387,6 +406,21 @@ class BST {
      * Recover BST | Correct the swapped nodes of a BST
      */
     fun recoverTree(root: TreeNode?) {
+
+        /**
+         * Intution :
+         * We can do inorder traversal and get the nodes which are not in the correct order
+         * We can swap the values of the nodes
+         *
+         * Example : [1,3,2,4,5]
+         *  [1, 5, 3, 4, 2, 6]
+         *
+         *
+         * Here 3 and 2 are swapped so 3>2, maintain the prev and first and second nodes which are swaped
+         *
+         * if prev > current, then there is swap,
+         * first = prev, second = current
+         */
         var first: TreeNode? = null
         var second: TreeNode? = null
         var prev: TreeNode? = null
@@ -405,11 +439,12 @@ class BST {
         inorder(root)
         val temp = first!!.value
         first!!.value = second!!.value
-        second!!.value = temp
+        second.value = temp
     }
 
     /**
      * Largest BST Subtree
+     *
      */
     fun largestBSTSubtree(root: TreeNode?): Int {
         fun dfs(node: TreeNode?): Triple<Int, Int, Int> {

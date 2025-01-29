@@ -28,7 +28,7 @@ class Problems {
     fun smallestDivisor(nums: IntArray, threshold: Int): Int {
         // mid >= threshold
         var low = 1
-        var high = nums.max()
+        var high = nums.max() // because the divisor can't be greater than the max value in the array
         var res = 0
         fun isPossible(mid: Int): Boolean {
             var sum = 0
@@ -69,7 +69,7 @@ class Problems {
      *
      */
     fun findMinEatingSpeed(piles: IntArray, h: Int): Int {
-        // takenKToEat < h
+        // takenKToEat <= h
         var low = 1
         var high = piles.max()
         var res = 0
@@ -147,19 +147,22 @@ class Problems {
         var res = -1
 
         fun canMake(t: Int): Boolean {
-            var count = 0
-            var noB = 0
+            var count = 0 // Count of adjacent bloomed flowers
+            var noB = 0   // Number of bouquets made
+
             for (day in bloomDay) {
                 if (day <= t) {
-                    count++
+                    count++ // Increment adjacent count
+                    if (count == k) {
+                        noB++   // Form a bouquet
+                        count = 0 // Reset adjacent count
+                    }
                 } else {
-                    noB += count / k
-                    count = 0
+                    count = 0 // Reset adjacent count if flower hasn't bloomed
                 }
             }
 
-            noB += count / k
-            return noB >= m
+            return noB >= m // Check if enough bouquets were made
         }
 
         while (low <= high) {
@@ -292,8 +295,6 @@ class Problems {
                     count++
                     prev = A[i]
                 }
-                if(count>B)
-                    return false
             }
             return count >= B
         }
@@ -366,8 +367,6 @@ class Problems {
                     count++
                     sum = i
                 }
-                if(count>B)
-                    return false
             }
             return count == B
         }
