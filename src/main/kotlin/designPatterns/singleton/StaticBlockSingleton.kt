@@ -1,18 +1,21 @@
 package designPatterns.singleton
 
-import designPatterns.singleton.StaticBlockSingleton
 
-internal object StaticBlockSingleton {
+internal class StaticBlockSingleton {
     // Public method to get the instance
     // The single instance
-    val instance: StaticBlockSingleton? = null
+    companion object {
+        // Static block for initialization
+        var instance: StaticBlockSingleton? = null
 
-    // Static block for initialization
-    init {
-        try {
-            instance = StaticBlockSingleton()
-        } catch (e: Exception) {
-            throw RuntimeException("Exception occurred in creating singleton instance")
+        init {
+            try {
+                instance = StaticBlockSingleton()
+            } catch (e: Exception) {
+                throw RuntimeException("Exception occurred in creating singleton instance")
+            }
         }
     }
+
+
 }

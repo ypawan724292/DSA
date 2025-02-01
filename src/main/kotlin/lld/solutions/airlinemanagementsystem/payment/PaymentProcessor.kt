@@ -1,20 +1,20 @@
-package lld.solutions.airlinemanagementsystem.payment;
+package lld.solutions.airlinemanagementsystem.payment
 
-public class PaymentProcessor {
-    private static PaymentProcessor instance;
-
-    private PaymentProcessor() {
-    }
-
-    public static synchronized PaymentProcessor getInstance() {
-        if (instance == null) {
-            instance = new PaymentProcessor();
-        }
-        return instance;
-    }
-
-    public void processPayment(Payment payment) {
+class PaymentProcessor private constructor() {
+    fun processPayment(payment: Payment) {
         // Process payment using the selected payment method
-        payment.processPayment();
+        payment.processPayment()
+    }
+
+    companion object {
+        @get:Synchronized
+        var instance: PaymentProcessor? = null
+            get() {
+                if (field == null) {
+                    field = PaymentProcessor()
+                }
+                return field
+            }
+            private set
     }
 }

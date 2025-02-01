@@ -1,6 +1,6 @@
 package designPatterns.decorator
 
-internal abstract class CoffeeDecorator(protected var decoratedCoffee: Coffee) : Coffee {
+internal abstract class CoffeeDecorator( var decoratedCoffee: Coffee) : Coffee {
     override fun getCost(): Double {
         return decoratedCoffee.getCost()
     }

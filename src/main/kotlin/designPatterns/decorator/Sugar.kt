@@ -1,6 +1,6 @@
 package designPatterns.decorator
 
-internal class Sugar(coffee: Coffee?) : CoffeeDecorator(coffee) {
+internal class Sugar(val coffee: Coffee) : CoffeeDecorator(coffee) {
     override fun getCost(): Double {
         return super.getCost() + 0.2
     }

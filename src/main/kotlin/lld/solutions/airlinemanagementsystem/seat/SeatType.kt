@@ -1,6 +1,6 @@
-package lld.solutions.airlinemanagementsystem.seat;
+package lld.solutions.airlinemanagementsystem.seat
 
-public enum SeatType {
+enum class SeatType {
     ECONOMY,
     PREMIUM_ECONOMY,
     BUSINESS,

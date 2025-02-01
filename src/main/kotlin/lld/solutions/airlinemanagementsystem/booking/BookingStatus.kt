@@ -1,6 +1,6 @@
-package lld.solutions.airlinemanagementsystem.booking;
+package lld.solutions.airlinemanagementsystem.booking
 
-public enum BookingStatus {
+enum class BookingStatus {
     CONFIRMED,
     CANCELLED,
     PENDING,

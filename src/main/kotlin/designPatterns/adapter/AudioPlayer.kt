@@ -3,7 +3,7 @@ package designPatterns.adapter
 internal class AudioPlayer : MediaPlayer {
     var mediaAdapter: MediaAdapter? = null
 
-    override fun play(audioType: String, fileName: String?) {
+    override fun play(audioType: String, fileName: String) {
         // inbuilt support to play mp3 music files
         if (audioType.equals("mp3", ignoreCase = true)) {
             println("Playing mp3 file. Name: " + fileName)

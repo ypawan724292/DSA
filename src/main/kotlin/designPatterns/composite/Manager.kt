@@ -1,13 +1,13 @@
 package designPatterns.composite
 
-internal class Manager(private val name: String?, private val salary: Double) : Employee {
-    private val subordinates: List<Employee?> = ArrayList()
+internal class Manager(private val name: String?, val salary: Double) : Employee {
+    private val subordinates = ArrayList<Employee>()
 
-    fun addEmployee(employee: Employee?) {
+    fun addEmployee(employee: Employee) {
         subordinates.add(employee)
     }
 
-    fun removeEmployee(employee: Employee?) {
+    fun removeEmployee(employee: Employee) {
         subordinates.remove(employee)
     }
 
@@ -15,14 +15,14 @@ internal class Manager(private val name: String?, private val salary: Double) : 
         println("Manager: " + name + ", Salary: $" + salary)
         println("Subordinates:")
         for (employee in subordinates) {
-            employee!!.showDetails()
+            employee.showDetails()
         }
     }
 
     override fun getSalary(): Double {
         var totalSalary = salary
         for (employee in subordinates) {
-            totalSalary += employee!!.getSalary()
+            totalSalary += employee.getSalary()
         }
         return totalSalary
     }

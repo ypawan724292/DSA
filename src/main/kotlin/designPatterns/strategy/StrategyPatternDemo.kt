@@ -1,6 +1,14 @@
 package designPatterns.strategy
 
+/**
+ * The Strategy Design Pattern is a behavioral design pattern that defines a family of algorithms, encapsulates each one, and makes them interchangeable. This pattern allows the algorithm to vary independently from clients that use it.
+ * Key Components:
+ * Strategy: The interface that defines a method for the algorithm.
+ * Concrete Strategy: Classes that implement the Strategy interface with specific algorithms.
+ * Context: The class that uses a Strategy to execute the algorithm.
+ */
 object StrategyPatternDemo {
+
     @JvmStatic
     fun main(args: Array<String>) {
         val cart = ShoppingCart()

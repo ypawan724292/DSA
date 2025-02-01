@@ -1,31 +1,24 @@
-package lld.solutions.airlinemanagementsystem.booking;
+package lld.solutions.airlinemanagementsystem.booking
 
-import airlinemanagementsystem.flight.Flight;
-import airlinemanagementsystem.Passenger;
-import airlinemanagementsystem.seat.Seat;
+import lld.solutions.airlinemanagementsystem.Passenger
+import lld.solutions.airlinemanagementsystem.flight.Flight
+import lld.solutions.airlinemanagementsystem.seat.Seat
 
-public class Booking {
-    private final String bookingNumber;
-    private final Flight flight;
-    private final Passenger passenger;
-    private final Seat seat;
-    private final double price;
-    private BookingStatus status;
 
-    public Booking(String bookingNumber, Flight flight, Passenger passenger, Seat seat, double price) {
-        this.bookingNumber = bookingNumber;
-        this.flight = flight;
-        this.passenger = passenger;
-        this.seat = seat;
-        this.price = price;
-        this.status = BookingStatus.CONFIRMED;
+data class Booking(
+    val bookingNumber: String,
+    val flight: Flight,
+    val passenger: Passenger,
+    val seat: Seat,
+    val price: Double,
+    private var status: BookingStatus? = null
+) {
+
+    fun confirmBooking() {
+        status = BookingStatus.CONFIRMED
     }
 
-    public void cancel() {
-        status = BookingStatus.CANCELLED;
-    }
-
-    public String getBookingNumber() {
-        return bookingNumber;
+    fun cancelBooking() {
+        status = BookingStatus.CANCELLED
     }
 }

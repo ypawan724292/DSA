@@ -1,5 +1,14 @@
 package designPatterns.composite
 
+/**
+ * The Composite Design Pattern is a structural design pattern that allows you to compose objects into tree structures to
+ * represent part-whole hierarchies. It lets clients treat individual objects and compositions of objects uniformly.
+ * Key Components:
+ * Component: Declares the interface for objects in the composition and implements default behavior for the interface common to all classes.
+ * Leaf: Represents leaf objects in the composition. A leaf has no children.
+ * Composite: Defines behavior for components having children and stores child components.
+ * Client: Manipulates objects in the composition through the Component interface.
+ */
 object CompositeDemo {
     @JvmStatic
     fun main(args: Array<String>) {

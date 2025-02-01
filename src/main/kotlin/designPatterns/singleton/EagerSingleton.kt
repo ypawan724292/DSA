@@ -1,9 +1,10 @@
 package designPatterns.singleton
 
-import designPatterns.singleton.EagerSingleton
 
-internal object EagerSingleton {
+internal class EagerSingleton {
     // Public method to get the instance
     // The single instance, created immediately
-    val instance: EagerSingleton = EagerSingleton()
+    companion object {
+        val instance: EagerSingleton = EagerSingleton()
+    }
 }

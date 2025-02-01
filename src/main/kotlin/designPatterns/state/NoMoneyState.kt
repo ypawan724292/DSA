@@ -6,11 +6,11 @@ internal class NoMoneyState : State {
         context.setState(HasMoneyState())
     }
 
-    override fun ejectMoney(context: VendingMachine?) {
+    override fun ejectMoney(context: VendingMachine) {
         println("No money to return")
     }
 
-    override fun dispense(context: VendingMachine?) {
+    override fun dispense(context: VendingMachine) {
         println("Payment required")
     }
 }

@@ -1,11 +1,7 @@
 package designPatterns.iterator
 
 internal class BookShelf : Container<Book?> {
-    private val books: List<Book?>
-
-    init {
-        books = ArrayList()
-    }
+    private val books: ArrayList<Book?> = ArrayList()
 
     fun addBook(book: Book?) {
         books.add(book)
@@ -20,12 +16,12 @@ internal class BookShelf : Container<Book?> {
         private var index = 0
 
         override fun hasNext(): Boolean {
-            return index < books.size()
+            return index < books.size
         }
 
         override fun next(): Book? {
             if (this.hasNext()) {
-                return books.get(index++)
+                return books[index++]
             }
             return null
         }

@@ -1,7 +1,7 @@
 package designPatterns.state
 
 internal class HasMoneyState : State {
-    override fun insertDollar(context: VendingMachine?) {
+    override fun insertDollar(context: VendingMachine) {
         println("Already have a dollar")
     }
 

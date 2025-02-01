@@ -1,53 +1,45 @@
-package lld.solutions.airlinemanagementsystem;
+package lld.solutions.airlinemanagementsystem
 
-import airlinemanagementsystem.booking.Booking;
-import airlinemanagementsystem.booking.BookingManager;
-import airlinemanagementsystem.flight.Flight;
-import airlinemanagementsystem.flight.FlightSearch;
-import airlinemanagementsystem.payment.Payment;
-import airlinemanagementsystem.payment.PaymentProcessor;
-import airlinemanagementsystem.seat.Seat;
+import lld.solutions.airlinemanagementsystem.booking.Booking
+import lld.solutions.airlinemanagementsystem.booking.BookingManager
+import lld.solutions.airlinemanagementsystem.flight.Flight
+import lld.solutions.airlinemanagementsystem.flight.FlightSearch
+import lld.solutions.airlinemanagementsystem.payment.Payment
+import lld.solutions.airlinemanagementsystem.payment.PaymentProcessor
+import lld.solutions.airlinemanagementsystem.seat.Seat
+import java.time.LocalDate
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AirlineManagementSystem {
-    private final List<Flight> flights;
-    private final List<Aircraft> aircrafts;
-    private final FlightSearch flightSearch;
-    private final BookingManager bookingManager;
-    private final PaymentProcessor paymentProcessor;
+class AirlineManagementSystem {
 
-    public AirlineManagementSystem() {
-        flights = new ArrayList<>();
-        aircrafts = new ArrayList<>();
-        flightSearch = new FlightSearch(flights);
-        bookingManager = BookingManager.getInstance();
-        paymentProcessor = PaymentProcessor.getInstance();
+    private val flights = mutableListOf<Flight>()
+    private val aircrafts = mutableListOf<Aircraft>()
+    private val flightSearch = FlightSearch(flights)
+    private val bookingManager = BookingManager.instance
+    private val paymentProcessor = PaymentProcessor.instance
+
+
+    fun addFlight(flight: Flight) {
+        flights.add(flight)
     }
 
-    public void addFlight(Flight flight) {
-        flights.add(flight);
+    fun addAircraft(aircraft: Aircraft) {
+        aircrafts.add(aircraft)
     }
 
-    public void addAircraft(Aircraft aircraft) {
-        aircrafts.add(aircraft);
+    fun searchFlights(source: String, destination: String, date: LocalDate): List<Flight> {
+        return flightSearch.searchFlights(source, destination, date)
     }
 
-    public List<Flight> searchFlights(String source, String destination, LocalDate date) {
-        return flightSearch.searchFlights(source, destination, date);
+    fun bookFlight(flight: Flight, passenger: Passenger, seat: Seat, price: Double): Booking? {
+        return bookingManager?.createBooking(flight, passenger, seat, price)
     }
 
-    public Booking bookFlight(Flight flight, Passenger passenger, Seat seat, double price) {
-        return bookingManager.createBooking(flight, passenger, seat, price);
+    fun cancelBooking(bookingNumber: String) {
+        bookingManager?.cancelBooking(bookingNumber)
     }
 
-    public void cancelBooking(String bookingNumber) {
-        bookingManager.cancelBooking(bookingNumber);
-    }
-
-    public void processPayment(Payment payment) {
-        paymentProcessor.processPayment(payment);
+    fun processPayment(payment: Payment) {
+        paymentProcessor?.processPayment(payment)
     }
 }

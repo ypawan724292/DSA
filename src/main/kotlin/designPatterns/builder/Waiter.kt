@@ -8,7 +8,7 @@ internal class Waiter {
     }
 
     val pizza: Pizza?
-        get() = pizzaBuilder!!.getPizza()
+        get() = pizzaBuilder!!.pizza
 
     fun constructPizza() {
         pizzaBuilder!!.buildDough()

@@ -1,53 +1,49 @@
-package lld.solutions.airlinemanagementsystem.booking;
+package lld.solutions.airlinemanagementsystem.booking
 
-import airlinemanagementsystem.flight.Flight;
-import airlinemanagementsystem.Passenger;
-import airlinemanagementsystem.seat.Seat;
+import lld.solutions.airlinemanagementsystem.Passenger
+import lld.solutions.airlinemanagementsystem.flight.Flight
+import lld.solutions.airlinemanagementsystem.seat.Seat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicInteger
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+class BookingManager private constructor() {
+    private val bookings = mutableMapOf<String, Booking>()
+    private val lock = Any()
+    private val bookingCounter = AtomicInteger(0)
 
-public class BookingManager {
-    private static BookingManager instance;
-    private final Map<String, Booking> bookings;
-    private final Object lock = new Object();
-    private final AtomicInteger bookingCounter = new AtomicInteger(0);
-
-    private BookingManager() {
-        bookings = new HashMap<>();
-    }
-
-    public static synchronized BookingManager getInstance() {
-        if (instance == null) {
-            instance = new BookingManager();
+    fun createBooking(flight: Flight, passenger: Passenger, seat: Seat, price: Double): Booking {
+        val bookingNumber = generateBookingNumber()
+        val booking = Booking(bookingNumber, flight, passenger, seat, price)
+        synchronized(lock) {
+            bookings.put(bookingNumber, booking)
+            booking.confirmBooking()
         }
-        return instance;
+        return booking
     }
 
-    public Booking createBooking(Flight flight, Passenger passenger, Seat seat, double price) {
-        String bookingNumber = generateBookingNumber();
-        Booking booking = new Booking(bookingNumber, flight, passenger, seat, price);
-        synchronized (lock) {
-            bookings.put(bookingNumber, booking);
+    fun cancelBooking(bookingNumber: String) {
+        synchronized(lock) {
+            val booking = bookings[bookingNumber]!!
+            booking.cancelBooking()
         }
-        return booking;
     }
 
-    public void cancelBooking(String bookingNumber) {
-        synchronized (lock) {
-            Booking booking = bookings.get(bookingNumber);
-            if (booking != null) {
-                booking.cancel();
+    private fun generateBookingNumber(): String {
+        val bookingId = bookingCounter.incrementAndGet()
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+        return "BKG" + timestamp + String.format("%06d", bookingId)
+    }
+
+    companion object {
+        @get:Synchronized
+        var instance: BookingManager? = null
+            get() {
+                if (field == null) {
+                    field = BookingManager()
+                }
+                return field
             }
-        }
-    }
-
-    private String generateBookingNumber() {
-        int bookingId = bookingCounter.incrementAndGet();
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        return "BKG" + timestamp + String.format("%06d", bookingId);
+            private set
     }
 }

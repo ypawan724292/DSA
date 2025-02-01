@@ -1,13 +1,7 @@
-package lld.solutions.airlinemanagementsystem;
+package lld.solutions.airlinemanagementsystem
 
-public class Aircraft {
-    private final String tailNumber;
-    private final String model;
-    private final int totalSeats;
-
-    public Aircraft(String tailNumber, String model, int totalSeats) {
-        this.tailNumber = tailNumber;
-        this.model = model;
-        this.totalSeats = totalSeats;
-    }
-}
+class Aircraft(
+    private val tailNumber: String,
+    private val model: String,
+    private val totalSeats: Int
+)

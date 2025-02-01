@@ -1,21 +1,19 @@
-package lld.solutions.airlinemanagementsystem.flight;
+package lld.solutions.airlinemanagementsystem.flight
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDate
+import java.util.stream.Collectors
 
-public class FlightSearch {
-    private final List<Flight> flights;
+class FlightSearch(private val flights: MutableList<Flight>) {
 
-    public FlightSearch(List<Flight> flights) {
-        this.flights = flights;
-    }
-
-    public List<Flight> searchFlights(String source, String destination, LocalDate date) {
-        return flights.stream()
-                .filter(flight -> flight.getSource().equalsIgnoreCase(source)
-                        && flight.getDestination().equalsIgnoreCase(destination)
-                        && flight.getDepartureTime().toLocalDate().equals(date))
-                .collect(Collectors.toList());
+    fun searchFlights(source: String, destination: String, date: LocalDate): List<Flight> {
+        val list = flights
+            .filter { flight ->
+                flight.source.contains(source, ignoreCase = true)
+                        && flight.destination.contains(destination, ignoreCase = true)
+                        && flight.departureTime.toLocalDate() == date
+            }.map {
+                it
+            }
+        return list
     }
 }

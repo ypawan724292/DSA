@@ -11,7 +11,7 @@ internal class MediaAdapter(audioType: String) : MediaPlayer {
         }
     }
 
-    override fun play(audioType: String, fileName: String?) {
+    override fun play(audioType: String, fileName: String) {
         if (audioType.equals("vlc", ignoreCase = true)) {
             advancedMusicPlayer!!.playVlc(fileName)
         } else if (audioType.equals("mp4", ignoreCase = true)) {

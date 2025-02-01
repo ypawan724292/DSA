@@ -1,6 +1,6 @@
-package lld.solutions.airlinemanagementsystem.payment;
+package lld.solutions.airlinemanagementsystem.payment
 
-public enum PaymentStatus {
+enum class PaymentStatus {
     PENDING,
     COMPLETED,
     FAILED,

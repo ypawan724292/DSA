@@ -1,11 +1,7 @@
 package designPatterns.builder
 
 internal class HawaiianPizzaBuilder : PizzaBuilder {
-    private val pizza: Pizza
-
-    init {
-        this.pizza = Pizza()
-    }
+    override val pizza: Pizza = Pizza()
 
     override fun buildDough() {
         pizza.setDough("cross")
@@ -17,9 +13,5 @@ internal class HawaiianPizzaBuilder : PizzaBuilder {
 
     override fun buildTopping() {
         pizza.setTopping("ham and pineapple")
-    }
-
-    override fun getPizza(): Pizza {
-        return this.pizza
     }
 }

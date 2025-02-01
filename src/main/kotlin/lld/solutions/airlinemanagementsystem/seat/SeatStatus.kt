@@ -1,6 +1,6 @@
-package lld.solutions.airlinemanagementsystem.seat;
+package lld.solutions.airlinemanagementsystem.seat
 
-public enum SeatStatus {
+enum class SeatStatus {
     AVAILABLE,
     RESERVED,
     OCCUPIED
