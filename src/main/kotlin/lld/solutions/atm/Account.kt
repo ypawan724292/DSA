@@ -1,27 +1,14 @@
-package lld.solutions.atm;
+package lld.solutions.atm
 
-public class Account {
-    private final String accountNumber;
-    private double balance;
-
-    public Account(String accountNumber, double balance) {
-        this.accountNumber = accountNumber;
-        this.balance = balance;
+data class Account(
+    val accountNumber: String,
+    var balance: Double
+) {
+    fun debit(amount: Double) {
+        balance -= amount
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void debit(double amount) {
-        balance -= amount;
-    }
-
-    public void credit(double amount) {
-        balance += amount;
+    fun credit(amount: Double) {
+        balance += amount
     }
 }

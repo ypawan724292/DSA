@@ -1,12 +1,9 @@
-package lld.solutions.atm;
+package lld.solutions.atm
 
-public class DepositTransaction extends Transaction {
-    public DepositTransaction(String transactionId, Account account, double amount) {
-        super(transactionId, account, amount);
-    }
+class DepositTransaction(transactionId: String, account: Account, amount: Double) :
+    Transaction(transactionId, account, amount) {
 
-    @Override
-    public void execute() {
-        account.credit(amount);
+    override fun execute() {
+        account.credit(amount)
     }
 }

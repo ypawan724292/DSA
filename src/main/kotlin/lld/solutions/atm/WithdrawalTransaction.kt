@@ -1,12 +1,9 @@
-package lld.solutions.atm;
+package lld.solutions.atm
 
-public class WithdrawalTransaction extends Transaction {
-    public WithdrawalTransaction(String transactionId, Account account, double amount) {
-        super(transactionId, account, amount);
-    }
+class WithdrawalTransaction(transactionId: String, account: Account, amount: Double) :
+    Transaction(transactionId, account, amount) {
 
-    @Override
-    public void execute() {
-        account.debit(amount);
+    override fun execute() {
+        account.debit(amount)
     }
 }

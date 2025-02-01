@@ -22,3 +22,40 @@
 5. The **CashDispenser** class represents the ATM's cash dispenser and handles the dispensing of cash. It uses synchronization to ensure thread safety when dispensing cash.
 6. The **ATM** class serves as the main interface for ATM operations. It interacts with the BankingService and CashDispenser to perform user authentication, balance inquiry, cash withdrawal, and cash deposit.
 7. The **ATMDriver** class demonstrates the usage of the ATM system by creating sample accounts and performing ATM operations.
+
+
+User -> ATM Manager -> Enter PIN and Authenticate-> Type Operations -> Check with BE and perform Operation -> Result
+
+Entity:
+1. Card
+    id,
+    pin 
+    authenticate
+    
+
+
+2. Operation
+    1. Withdraw
+    2. Deposit
+    3. Balance Inquiry
+
+
+
+3. Account
+    id,
+    balance,
+    bankId,
+    cardId,
+
+4. Trasnaction
+   1. trancsacId
+   2. accountId
+   3. balance
+
+1. AuthenticateManager
+
+
+2. BankService
+
+
+3. 

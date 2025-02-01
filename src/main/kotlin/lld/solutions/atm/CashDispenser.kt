@@ -1,17 +1,11 @@
-package lld.solutions.atm;
+package lld.solutions.atm
 
-public class CashDispenser {
-    private int cashAvailable;
+class CashDispenser(private var cashAvailable: Int) {
 
-    public CashDispenser(int initialCash) {
-        this.cashAvailable = initialCash;
-    }
-
-    public synchronized void dispenseCash(int amount) {
-        if (amount > cashAvailable) {
-            throw new IllegalArgumentException("Insufficient cash available in the ATM.");
-        }
-        cashAvailable -= amount;
-        System.out.println("Cash dispensed: " + amount);
+    @Synchronized
+    fun dispenseCash(amount: Int) {
+        require(amount <= cashAvailable) { "Insufficient cash available in the ATM." }
+        cashAvailable -= amount
+        println("Cash dispensed: " + amount)
     }
 }

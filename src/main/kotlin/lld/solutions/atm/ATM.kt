@@ -1,51 +1,49 @@
-package lld.solutions.atm;
+package lld.solutions.atm
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.atomic.AtomicLong;
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.atomic.AtomicLong
 
-public class ATM {
-    private final BankingService bankingService;
-    private final CashDispenser cashDispenser;
-    private static final AtomicLong transactionCounter = new AtomicLong(0);
-
-    public ATM(BankingService bankingService, CashDispenser cashDispenser) {
-        this.bankingService = bankingService;
-        this.cashDispenser = cashDispenser;
-    }
-
-    public void authenticateUser(Card card) {
+class ATM(
+    private val bankingService: BankingService,
+    private val cashDispenser: CashDispenser
+) {
+    fun authenticateUser(card: Card?) {
         // Authenticate user using card and PIN
         // ...
     }
 
-    public double checkBalance(String accountNumber) {
-        Account account = bankingService.getAccount(accountNumber);
-        return account.getBalance();
+    fun checkBalance(accountNumber: String): Double {
+        val account = bankingService.getAccount(accountNumber)
+        return account.balance
     }
 
-    public void withdrawCash(String accountNumber, double amount) {
-        Account account = bankingService.getAccount(accountNumber);
+    fun withdrawCash(accountNumber: String, amount: Double) {
+        val account = bankingService.getAccount(accountNumber)
         // Check if sufficient balance is available
-        if (account != null && account.getBalance() < amount) {
-            System.out.println("Error: Insufficient balance.");
-            return;
+        if (account.balance < amount) {
+            println("Error: Insufficient balance.")
+            return
         }
-        Transaction transaction = new WithdrawalTransaction(generateTransactionId(), account, amount);
-        bankingService.processTransaction(transaction);
-        cashDispenser.dispenseCash((int) amount);
+        val transaction: Transaction = WithdrawalTransaction(generateTransactionId(), account, amount)
+        bankingService.processTransaction(transaction)
+        cashDispenser.dispenseCash(amount.toInt())
     }
 
-    public void depositCash(String accountNumber, double amount) {
-        Account account = bankingService.getAccount(accountNumber);
-        Transaction transaction = new DepositTransaction(generateTransactionId(), account, amount);
-        bankingService.processTransaction(transaction);
+    fun depositCash(accountNumber: String, amount: Double) {
+        val account = bankingService.getAccount(accountNumber)
+        val transaction: Transaction = DepositTransaction(generateTransactionId(), account, amount)
+        bankingService.processTransaction(transaction)
     }
 
-    private String generateTransactionId() {
+    private fun generateTransactionId(): String {
         // Generate a unique transaction ID
-        long transactionNumber = transactionCounter.incrementAndGet();
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        return "TXN" + timestamp + String.format("%010d", transactionNumber);
+        val transactionNumber: Long = transactionCounter.incrementAndGet()
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+        return "TXN" + timestamp + String.format("%010d", transactionNumber)
+    }
+
+    companion object {
+        private val transactionCounter = AtomicLong(0)
     }
 }

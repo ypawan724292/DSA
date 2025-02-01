@@ -1,20 +1,27 @@
-package lld.solutions.atm;
+package lld.solutions.atm
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class BankingService {
-    private final Map<String, Account> accounts = new ConcurrentHashMap<>();
+class BankingService {
 
-    public void createAccount(String accountNumber, double initialBalance) {
-        accounts.put(accountNumber, new Account(accountNumber, initialBalance));
+    private val accounts = mutableMapOf<String, Account>()
+
+    fun createAccount(accountNumber: String, initialBalance: Double) {
+        accounts.put(accountNumber, Account(accountNumber, initialBalance))
     }
 
-    public Account getAccount(String accountNumber) {
-        return accounts.get(accountNumber);
+    fun getAccount(accountNumber: String): Account {
+        val account = accounts[accountNumber]
+        if (account == null) {
+            throw Exception("Account not found")
+        }
+        return account
     }
 
-    public void processTransaction(Transaction transaction) {
-        transaction.execute();
+    fun processTransaction(transaction: Transaction) {
+        transaction.execute()
+    }
+
+    fun checkAccountExists(accountNumber: String): Boolean {
+        return accounts.containsKey(accountNumber)
     }
 }
