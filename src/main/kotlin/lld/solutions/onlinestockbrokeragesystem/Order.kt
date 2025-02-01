@@ -1,21 +1,13 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public abstract class Order {
-    protected final String orderId;
-    protected final Account account;
-    protected final Stock stock;
-    protected final int quantity;
-    protected final double price;
-    protected OrderStatus status;
+abstract class Order(
+    protected val orderId: String,
+    protected val account: Account,
+    protected val stock: Stock,
+    protected val quantity: Int,
+    protected val price: Double,
+    protected var status: OrderStatus = OrderStatus.PENDING
+) {
 
-    public Order(String orderId, Account account, Stock stock, int quantity, double price) {
-        this.orderId = orderId;
-        this.account = account;
-        this.stock = stock;
-        this.quantity = quantity;
-        this.price = price;
-        this.status = OrderStatus.PENDING;
-    }
-
-    public abstract void execute();
+    abstract fun execute()
 }

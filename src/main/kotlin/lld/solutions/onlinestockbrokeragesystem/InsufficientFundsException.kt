@@ -1,7 +1,3 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public class InsufficientFundsException extends RuntimeException {
-    public InsufficientFundsException(String message) {
-        super(message);
-    }
-}
+class InsufficientFundsException(message: String?) : RuntimeException(message)

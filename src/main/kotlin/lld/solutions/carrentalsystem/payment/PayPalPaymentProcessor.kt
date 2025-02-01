@@ -1,10 +1,9 @@
-package lld.solutions.carrentalsystem.payment;
+package lld.solutions.carrentalsystem.payment
 
-public class PayPalPaymentProcessor implements PaymentProcessor {
-    @Override
-    public boolean processPayment(double amount) {
+class PayPalPaymentProcessor : PaymentProcessor {
+    override fun processPayment(amount: Double): Boolean {
         // Process PayPal payment
         // ...
-        return true;
+        return true
     }
 }

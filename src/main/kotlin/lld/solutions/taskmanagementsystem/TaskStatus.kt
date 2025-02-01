@@ -1,6 +1,6 @@
-package lld.solutions.taskmanagementsystem;
+package lld.solutions.taskmanagementsystem
 
-public enum TaskStatus {
+enum class TaskStatus {
     PENDING,
     IN_PROGRESS,
     COMPLETED

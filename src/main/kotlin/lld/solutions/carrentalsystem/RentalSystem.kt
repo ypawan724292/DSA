@@ -1,88 +1,88 @@
-package lld.solutions.carrentalsystem;
+package lld.solutions.carrentalsystem
 
-import carrentalsystem.payment.CreditCardPaymentProcessor;
-import carrentalsystem.payment.PaymentProcessor;
+import lld.solutions.carrentalsystem.payment.CreditCardPaymentProcessor
+import lld.solutions.carrentalsystem.payment.PaymentProcessor
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.ConcurrentHashMap
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class RentalSystem {
-    private static RentalSystem instance;
-    private final Map<String, Car> cars;
-    private final Map<String, Reservation> reservations;
-    private final PaymentProcessor paymentProcessor;
+class RentalSystem private constructor() {
 
-    private RentalSystem() {
-        cars = new ConcurrentHashMap<>();
-        reservations = new ConcurrentHashMap<>();
-        paymentProcessor = new CreditCardPaymentProcessor();
+    private val cars: MutableMap<String, Car> = ConcurrentHashMap<String, Car>()
+    private val reservations: MutableMap<String, Reservation> = ConcurrentHashMap<String, Reservation>()
+    private val paymentProcessor: PaymentProcessor = CreditCardPaymentProcessor()
+
+    fun addCar(car: Car) {
+        cars.put(car.licensePlate, car)
     }
 
-    public static synchronized RentalSystem getInstance() {
-        if (instance == null) {
-            instance = new RentalSystem();
-        }
-        return instance;
+    fun removeCar(licensePlate: String?) {
+        cars.remove(licensePlate)
     }
 
-    public void addCar(Car car) {
-        cars.put(car.getLicensePlate(), car);
-    }
-
-    public void removeCar(String licensePlate) {
-        cars.remove(licensePlate);
-    }
-
-    public List<Car> searchCars(String make, String model, LocalDate startDate, LocalDate endDate) {
-        List<Car> availableCars = new ArrayList<>();
-        for (Car car : cars.values()) {
-            if (car.getMake().equalsIgnoreCase(make) && car.getModel().equalsIgnoreCase(model) && car.isAvailable()) {
+    fun searchCars(make: String?, model: String?, startDate: LocalDate, endDate: LocalDate): MutableList<Car> {
+        val availableCars: MutableList<Car> = ArrayList<Car>()
+        for (car in cars.values) {
+            if (car.make.equals(make, ignoreCase = true) && car.model
+                    .equals(model, ignoreCase = true) && car.isAvailable
+            ) {
                 if (isCarAvailable(car, startDate, endDate)) {
-                    availableCars.add(car);
+                    availableCars.add(car)
                 }
             }
         }
-        return availableCars;
+        return availableCars
     }
 
-    private boolean isCarAvailable(Car car, LocalDate startDate, LocalDate endDate) {
-        for (Reservation reservation : reservations.values()) {
-            if (reservation.getCar().equals(car)) {
-                if (startDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate())) {
-                    return false;
+    private fun isCarAvailable(car: Car, startDate: LocalDate, endDate: LocalDate): Boolean {
+        for (reservation in reservations.values) {
+            if (reservation.car == car) {
+                if (startDate.isBefore(reservation.endDate) && endDate.isAfter(reservation.startDate)) {
+                    return false
                 }
             }
         }
-        return true;
+        return true
     }
 
-    public synchronized Reservation makeReservation(Customer customer, Car car, LocalDate startDate, LocalDate endDate) {
+    @Synchronized
+    fun makeReservation(customer: Customer?, car: Car, startDate: LocalDate, endDate: LocalDate): Reservation? {
         if (isCarAvailable(car, startDate, endDate)) {
-            String reservationId = generateReservationId();
-            Reservation reservation = new Reservation(reservationId, customer, car, startDate, endDate);
-            reservations.put(reservationId, reservation);
-            car.setAvailable(false);
-            return reservation;
+            val reservationId = generateReservationId()
+            val reservation = Reservation(reservationId, customer, car, startDate, endDate)
+            reservations.put(reservationId, reservation)
+            car.isAvailable = false
+            return reservation
         }
-        return null;
+        return null
     }
 
-    public synchronized void cancelReservation(String reservationId) {
-        Reservation reservation = reservations.remove(reservationId);
-        if (reservation != null) {
-            reservation.getCar().setAvailable(true);
-        }
+    @Synchronized
+    fun cancelReservation(reservationId: String) {
+        val reservation = reservations.remove(reservationId)
+        reservation?.car?.isAvailable = true
     }
 
-    public boolean processPayment(Reservation reservation) {
-        return paymentProcessor.processPayment(reservation.getTotalPrice());
+    fun processPayment(reservation: Reservation): Boolean {
+        return paymentProcessor.processPayment(reservation.totalPrice)
     }
 
-    private String generateReservationId() {
-        return "RES" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    private fun generateReservationId(): String {
+        val timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+        return "RES" + timeStamp.toString().substring(0, 8).uppercase()
+    }
+
+    companion object {
+        @get:Synchronized
+        var instance: RentalSystem? = null
+            get() {
+                if (field == null) {
+                    field = RentalSystem()
+                }
+                return field
+            }
+            private set
     }
 }

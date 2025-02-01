@@ -1,16 +1,12 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public class SellOrder extends Order {
-    public SellOrder(String orderId, Account account, Stock stock, int quantity, double price) {
-        super(orderId, account, stock, quantity, price);
-    }
-
-    @Override
-    public void execute() {
+class SellOrder(orderId: String?, account: Account?, stock: Stock?, quantity: Int, price: Double) :
+    Order(orderId, account, stock, quantity, price) {
+    override fun execute() {
         // Check if the user has sufficient quantity of the stock to sell
         // Update portfolio and perform necessary actions
-        double totalProceeds = quantity * price;
-        account.deposit(totalProceeds);
-        status = OrderStatus.EXECUTED;
+        val totalProceeds = quantity * price
+        account.deposit(totalProceeds)
+        status = OrderStatus.EXECUTED
     }
 }

@@ -1,27 +1,5 @@
-package lld.solutions.taskmanagementsystem;
+package lld.solutions.taskmanagementsystem
 
-public class User {
-    private final String id;
-    private final String name;
-    private final String email;
-
-    public User(String id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
-
-    // Getters and setters
-
-    public String getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-}
+class User(// Getters and setters
+    val id: String?, val name: String?, val email: String?
+)

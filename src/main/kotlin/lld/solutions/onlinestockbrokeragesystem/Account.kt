@@ -1,43 +1,23 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public class Account {
-    private final String accountId;
-    private final User user;
-    private double balance;
-    private final Portfolio portfolio;
+class Account(
+    val accountId: String,
+    val user: User,
+    var balance: Double
+) {
+    val portfolio: Portfolio = Portfolio(this)
 
-    public Account(String accountId, User user, double initialBalance) {
-        this.accountId = accountId;
-        this.user = user;
-        this.balance = initialBalance;
-        this.portfolio = new Portfolio(this);
+    @Synchronized
+    fun deposit(amount: Double) {
+        balance += amount
     }
 
-    public synchronized void deposit(double amount) {
-        balance += amount;
-    }
-
-    public synchronized void withdraw(double amount) {
+    @Synchronized
+    fun withdraw(amount: Double) {
         if (balance >= amount) {
-            balance -= amount;
+            balance -= amount
         } else {
-            throw new InsufficientFundsException("Insufficient funds in the account.");
+            throw InsufficientFundsException("Insufficient funds in the account.")
         }
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public Portfolio getPortfolio() {
-        return portfolio;
     }
 }

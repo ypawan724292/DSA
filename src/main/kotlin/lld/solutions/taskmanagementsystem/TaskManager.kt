@@ -1,104 +1,105 @@
-package lld.solutions.taskmanagementsystem;
+package lld.solutions.taskmanagementsystem
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
-public class TaskManager {
-    private static TaskManager instance;
-    private final Map<String, Task> tasks;
-    private final Map<String, List<Task>> userTasks;
+class TaskManager private constructor() {
+    private val tasks: MutableMap<String?, Task>
+    private val userTasks: MutableMap<String?, MutableList<Task?>?>
 
-    private TaskManager() {
-        tasks = new ConcurrentHashMap<>();
-        userTasks = new ConcurrentHashMap<>();
+    init {
+        tasks = ConcurrentHashMap<String?, Task>()
+        userTasks = ConcurrentHashMap<String?, MutableList<Task?>?>()
     }
 
-    public static synchronized TaskManager getInstance() {
-        if (instance == null) {
-            instance = new TaskManager();
-        }
-        return instance;
+    fun createTask(task: Task) {
+        tasks.put(task.getId(), task)
+        assignTaskToUser(task.getAssignedUser(), task)
     }
 
-    public void createTask(Task task) {
-        tasks.put(task.getId(), task);
-        assignTaskToUser(task.getAssignedUser(), task);
-    }
-
-    public void updateTask(Task updatedTask) {
-        Task existingTask = tasks.get(updatedTask.getId());
+    fun updateTask(updatedTask: Task) {
+        val existingTask = tasks.get(updatedTask.getId())
         if (existingTask != null) {
-            synchronized (existingTask) {
-                existingTask.setTitle(updatedTask.getTitle());
-                existingTask.setDescription(updatedTask.getDescription());
-                existingTask.setDueDate(updatedTask.getDueDate());
-                existingTask.setPriority(updatedTask.getPriority());
-                existingTask.setStatus(updatedTask.getStatus());
-                User previousUser = existingTask.getAssignedUser();
-                User newUser = updatedTask.getAssignedUser();
-                if (!previousUser.equals(newUser)) {
-                    unassignTaskFromUser(previousUser, existingTask);
-                    assignTaskToUser(newUser, existingTask);
+            synchronized(existingTask) {
+                existingTask.setTitle(updatedTask.getTitle())
+                existingTask.setDescription(updatedTask.getDescription())
+                existingTask.setDueDate(updatedTask.getDueDate())
+                existingTask.setPriority(updatedTask.getPriority())
+                existingTask.setStatus(updatedTask.getStatus())
+                val previousUser = existingTask.getAssignedUser()
+                val newUser = updatedTask.getAssignedUser()
+                if (previousUser != newUser) {
+                    unassignTaskFromUser(previousUser, existingTask)
+                    assignTaskToUser(newUser, existingTask)
                 }
             }
         }
     }
 
-    public void deleteTask(String taskId) {
-        Task task = tasks.remove(taskId);
+    fun deleteTask(taskId: String?) {
+        val task = tasks.remove(taskId)
         if (task != null) {
-            unassignTaskFromUser(task.getAssignedUser(), task);
+            unassignTaskFromUser(task.getAssignedUser(), task)
         }
     }
 
-    public List<Task> searchTasks(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
-        for (Task task : tasks.values()) {
+    fun searchTasks(keyword: String): MutableList<Task?> {
+        val matchingTasks: MutableList<Task?> = ArrayList<Task?>()
+        for (task in tasks.values) {
             if (task.getTitle().contains(keyword) || task.getDescription().contains(keyword)) {
-                matchingTasks.add(task);
+                matchingTasks.add(task)
             }
         }
-        return matchingTasks;
+        return matchingTasks
     }
 
-    public List<Task> filterTasks(TaskStatus status, Date startDate, Date endDate, int priority) {
-        List<Task> filteredTasks = new ArrayList<>();
-        for (Task task : tasks.values()) {
-            if (task.getStatus() == status &&
-                    task.getDueDate().compareTo(startDate) >= 0 &&
-                    task.getDueDate().compareTo(endDate) <= 0 &&
-                    task.getPriority() == priority) {
-                filteredTasks.add(task);
+    fun filterTasks(status: TaskStatus?, startDate: Date?, endDate: Date?, priority: Int): MutableList<Task?> {
+        val filteredTasks: MutableList<Task?> = ArrayList<Task?>()
+        for (task in tasks.values) {
+            if (task.getStatus() == status && task.getDueDate().compareTo(startDate) >= 0 && task.getDueDate()
+                    .compareTo(endDate) <= 0 && task.getPriority() == priority
+            ) {
+                filteredTasks.add(task)
             }
         }
-        return filteredTasks;
+        return filteredTasks
     }
 
-    public void markTaskAsCompleted(String taskId) {
-        Task task = tasks.get(taskId);
+    fun markTaskAsCompleted(taskId: String?) {
+        val task = tasks.get(taskId)
         if (task != null) {
-            synchronized (task) {
-                task.setStatus(TaskStatus.COMPLETED);
+            synchronized(task) {
+                task.setStatus(TaskStatus.COMPLETED)
             }
         }
     }
 
-    public List<Task> getTaskHistory(User user) {
-        return new ArrayList<>(userTasks.getOrDefault(user.getId(), new ArrayList<>()));
+    fun getTaskHistory(user: User): MutableList<Task?> {
+        return ArrayList<Task?>(userTasks.getOrDefault(user.getId(), ArrayList<Task?>()))
     }
 
-    private void assignTaskToUser(User user, Task task) {
-        userTasks.computeIfAbsent(user.getId(), k -> new CopyOnWriteArrayList<>()).add(task);
+    private fun assignTaskToUser(user: User, task: Task?) {
+        userTasks.computeIfAbsent(user.getId()) { k: kotlin.String? -> CopyOnWriteArrayList<lld.solutions.taskmanagementsystem.Task?>() }!!
+            .add(task)
     }
 
-    private void unassignTaskFromUser(User user, Task task) {
-        List<Task> tasks = userTasks.get(user.getId());
+    private fun unassignTaskFromUser(user: User, task: Task?) {
+        val tasks = userTasks.get(user.getId())
         if (tasks != null) {
-            tasks.remove(task);
+            tasks.remove(task)
         }
+    }
+
+    companion object {
+        @get:Synchronized
+        var instance: TaskManager? = null
+            get() {
+                if (field == null) {
+                    field = TaskManager()
+                }
+                return field
+            }
+            private set
     }
 }

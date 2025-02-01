@@ -1,10 +1,9 @@
-package lld.solutions.carrentalsystem.payment;
+package lld.solutions.carrentalsystem.payment
 
-public class CreditCardPaymentProcessor implements PaymentProcessor {
-    @Override
-    public boolean processPayment(double amount) {
+class CreditCardPaymentProcessor : PaymentProcessor {
+    override fun processPayment(amount: Double): Boolean {
         // Process credit card payment
         // ...
-        return true;
+        return true
     }
 }

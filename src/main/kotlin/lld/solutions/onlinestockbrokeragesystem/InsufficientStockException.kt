@@ -1,7 +1,3 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public class InsufficientStockException extends RuntimeException {
-    public InsufficientStockException(String message) {
-        super(message);
-    }
-}
+class InsufficientStockException(message: String?) : RuntimeException(message)

@@ -1,6 +1,6 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public enum OrderStatus {
+enum class OrderStatus {
     PENDING,
     EXECUTED,
     REJECTED

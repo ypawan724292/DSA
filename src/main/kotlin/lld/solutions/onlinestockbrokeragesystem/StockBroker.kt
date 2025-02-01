@@ -1,69 +1,66 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicInteger
 
-public class StockBroker {
-    private static StockBroker instance;
-    private final Map<String, Account> accounts;
-    private final Map<String, Stock> stocks;
-    private final Queue<Order> orderQueue;
-    private final AtomicInteger accountIdCounter;
+class StockBroker private constructor() {
+    private val accounts: MutableMap<String, Account> = ConcurrentHashMap<String, Account>()
+    private val stocks: MutableMap<String, Stock> = ConcurrentHashMap<String, Stock>()
+    private val orderQueue: Queue<Order> = ConcurrentLinkedQueue<Order>()
+    private val accountIdCounter: AtomicInteger = AtomicInteger(1)
 
-    private StockBroker() {
-        accounts = new ConcurrentHashMap<>();
-        stocks = new ConcurrentHashMap<>();
-        orderQueue = new ConcurrentLinkedQueue<>();
-        accountIdCounter = new AtomicInteger(1);
+    fun createAccount(user: User, initialBalance: Double) {
+        val accountId = generateAccountId()
+        val account = Account(accountId, user, initialBalance)
+        accounts.put(accountId, account)
     }
 
-    public static synchronized StockBroker getInstance() {
-        if (instance == null) {
-            instance = new StockBroker();
-        }
-        return instance;
+    fun getAccount(accountId: String): Account {
+        return accounts[accountId]!!
     }
 
-    public void createAccount(User user, double initialBalance) {
-        String accountId = generateAccountId();
-        Account account = new Account(accountId, user, initialBalance);
-        accounts.put(accountId, account);
+    fun addStock(stock: Stock) {
+        stocks.put(stock.symbol, stock)
     }
 
-    public Account getAccount(String accountId) {
-        return accounts.get(accountId);
+    fun getStock(symbol: String): Stock? {
+        return stocks[symbol]
     }
 
-    public void addStock(Stock stock) {
-        stocks.put(stock.getSymbol(), stock);
+    fun placeOrder(order: Order?) {
+        orderQueue.offer(order)
+        processOrders()
     }
 
-    public Stock getStock(String symbol) {
-        return stocks.get(symbol);
-    }
-
-    public void placeOrder(Order order) {
-        orderQueue.offer(order);
-        processOrders();
-    }
-
-    private void processOrders() {
+    private fun processOrders() {
         while (!orderQueue.isEmpty()) {
-            Order order = orderQueue.poll();
+            val order = orderQueue.poll()
             try {
-                order.execute();
-            } catch (InsufficientFundsException | InsufficientStockException e) {
+                order.execute()
+            } catch (e: InsufficientFundsException) {
                 // Handle exception and notify user
-                System.out.println("Order failed: " + e.getMessage());
+                println("Order failed: " + e.message)
+            } catch (e: InsufficientStockException) {
+                println("Order failed: " + e.message)
             }
         }
     }
 
-    private String generateAccountId() {
-        int accountId = accountIdCounter.getAndIncrement();
-        return "A" + String.format("%03d", accountId);
+    private fun generateAccountId(): String {
+        val accountId = accountIdCounter.getAndIncrement()
+        return "A" + String.format("%03d", accountId)
+    }
+
+    companion object {
+        @get:Synchronized
+        var instance: StockBroker? = null
+        fun getInstance(): StockBroker {
+            if (instance == null) {
+                instance = StockBroker()
+            }
+            return instance!!
+        }
     }
 }

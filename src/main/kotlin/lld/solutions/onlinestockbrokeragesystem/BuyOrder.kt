@@ -1,20 +1,21 @@
-package lld.solutions.onlinestockbrokeragesystem;
+package lld.solutions.onlinestockbrokeragesystem
 
-public class BuyOrder extends Order {
-    public BuyOrder(String orderId, Account account, Stock stock, int quantity, double price) {
-        super(orderId, account, stock, quantity, price);
-    }
-
-    @Override
-    public void execute() {
-        double totalCost = quantity * price;
-        if (account.getBalance() >= totalCost) {
-            account.withdraw(totalCost);
+class BuyOrder(
+    orderId: String,
+    account: Account,
+    stock: Stock,
+    quantity: Int,
+    price: Double
+) : Order(orderId, account, stock, quantity, price) {
+    override fun execute() {
+        val totalCost = quantity * price
+        if (account.balance >= totalCost) {
+            account.withdraw(totalCost)
             // Update portfolio and perform necessary actions
-            status = OrderStatus.EXECUTED;
+            status = OrderStatus.EXECUTED
         } else {
-            status = OrderStatus.REJECTED;
-            throw new InsufficientFundsException("Insufficient funds to execute the buy order.");
+            status = OrderStatus.REJECTED
+            throw InsufficientFundsException("Insufficient funds to execute the buy order.")
         }
     }
 }
