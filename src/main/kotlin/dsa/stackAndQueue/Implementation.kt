@@ -229,6 +229,8 @@ class Implementation {
      * lRUCache.get(4);    // return 4
      */
     class LRUCache(private val capacity: Int) {
+
+        //refer the LRU in LLD solutions
         private val cache = LinkedHashMap<Int, Int>(capacity, 0.75f, true)
 
         fun get(key: Int): Int {

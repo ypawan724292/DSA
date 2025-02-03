@@ -460,10 +460,6 @@ class Basics {
     }
 
 
-
-
-
-
     /**
      * Given k sorted arrays arranged in the form of a matrix of size k * k.
      * The task is to merge them into one sorted array.
@@ -755,5 +751,33 @@ class Basics {
 
         return result
     }
+
+
+    /**
+     * You are given an integer array coins representing coins of different denominations and
+     * an integer amount representing a total amount of money.
+     */
+    fun maxGold(coins: IntArray, k: Int): Double {
+        // Max heap (using a PriorityQueue with reverse order)
+        val maxHeap = PriorityQueue<Double>(compareByDescending { it })
+
+        // Add all coins to the heap
+        coins.forEach { maxHeap.add(it.toDouble()) }
+
+        var totalGold = 0.0
+
+        // Perform k chances
+        repeat(k) {
+            // Extract the max coin value
+            val maxCoin = maxHeap.poll()
+            totalGold += maxCoin
+
+            // Push half of this value back into the heap
+            maxHeap.add(maxCoin / 2)
+        }
+
+        return totalGold
+    }
+
 
 }

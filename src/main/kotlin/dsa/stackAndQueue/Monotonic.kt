@@ -1,7 +1,6 @@
 package dsa.stackAndQueue
 
 import annotations.Important
-import java.util.*
 import kotlin.collections.ArrayDeque
 import kotlin.collections.isNotEmpty
 import kotlin.collections.map
@@ -22,8 +21,11 @@ class Monotonic {
 
     /**
      * Previous Greater Element
-     * Example:
-     * PGE([2, 1, 2, 4, 3]) -> [-1,2,-1,-1,4]
+     *
+     * Input: [1, 5, 3, 2, 4, 6]
+     * Output: [-1, -1, 5, 3, 5, -1]
+     * Input: [6, 5, 4, 3, 2, 1]
+     * Output: [-1, 6, 5, 4, 3, 2]
      */
     fun PGE(arr: IntArray): IntArray {
         val n = arr.size
@@ -32,6 +34,8 @@ class Monotonic {
         val res = IntArray(n)
 
         for (i in 0 until n) {
+            // While the stack is not empty and the top element of the stack is less than or equal to the current element arr[i],
+            // pop elements from the stack. These elements cannot be the nearest greater element for arr[i] or any subsequent elements.
             while (stack.isNotEmpty() && stack.last() <= arr[i]) {
                 stack.removeLast()
             }
@@ -268,7 +272,11 @@ class Monotonic {
 
         val n = arr.size
 
-        fun findNSE(): IntArray {
+        /*
+            Why <= (smaller or equal)? If we used < (strictly smaller), we would exclude elements equal to arr[i] from
+            the right boundary. This would lead to undercounting subarrays where arr[i] is the minimum.
+         */
+        fun findNSEE(): IntArray {
             val res = IntArray(n)
             val stack = ArrayDeque<Int>()
 
@@ -283,7 +291,11 @@ class Monotonic {
         }
 
 
-        fun findPSEE(): IntArray {
+        /*
+            Why < (strictly smaller)? If we used <= (smaller or equal), we would include elements equal to arr[i] in the
+            left boundary. This would lead to overcounting subarrays where arr[i] is not the minimum.
+         */
+        fun findPSE(): IntArray {
             val res = IntArray(n) { -1 }
             val stack = ArrayDeque<Int>()
 
@@ -298,9 +310,11 @@ class Monotonic {
             return res
         }
 
+        // we include the sa
+
         var total = 0L
-        val prev = findPSEE()
-        val next = findNSE()
+        val prev = findPSE()
+        val next = findNSEE()
         for (i in arr.indices) {
             val left = (i - prev[i]).toLong() % MOD
             val right = (next[i] - i).toLong() % MOD
@@ -570,7 +584,7 @@ class Monotonic {
         var k = remove
 
         for (c in num) {
-            while (stack.isNotEmpty() && stack.last() > c && k > 0) {
+            while (stack.isNotEmpty() && stack.last() >= c && k > 0) {
                 stack.removeLast()
                 k--
             }

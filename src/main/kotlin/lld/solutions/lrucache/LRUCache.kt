@@ -1,68 +1,71 @@
-package lld.solutions.lrucache;
+import lld.solutions.lrucache.Node
 
-import java.util.HashMap;
-import java.util.Map;
 
-class LRUCache<K, V> {
-    private final int capacity;
-    private final Map<K, Node<K, V>> cache;
-    private final Node<K, V> head;
-    private final Node<K, V> tail;
+/**
+ * 1. LRU (Least Recently Used) Cache Design
+ * The LRU Cache is based on the principle that the least recently accessed element should be removed when the cache reaches its capacity. It should support the operations:
+ *
+ * get(key): Returns the value associated with the key, and marks it as recently used.
+ * put(key, value): Adds or updates the value for the key, and marks it as recently used.
+ * To achieve O(1) time complexity for both get and put, we will use:
+ *
+ * A HashMap for fast lookup by key.
+ * A Doubly Linked List to track the order of access (most recent to least recent).
+ */
+class LRUCache<K, V>(private val capacity: Int) {
+    private val cache: HashMap<K, Node<K, V>> = HashMap(capacity)
+    private var size = 0
+    private val head = Node<K, V>(key = null, value = null) // Dummy head node
+    private val tail = Node<K, V>(key = null, value = null) // Dummy tail node
 
-    public LRUCache(int capacity) {
-        this.capacity = capacity;
-        cache = new HashMap<>(capacity);
-        head = new Node<>(null, null);
-        tail = new Node<>(null, null);
-        head.next = tail;
-        tail.prev = head;
+    init {
+        head.next = tail
+        tail.prev = head
     }
 
-    public synchronized V get(K key) {
-        Node<K, V> node = cache.get(key);
-        if (node == null) {
-            return null;
+    // Remove node from the linked list
+    private fun remove(node: Node<K, V>) {
+        node.prev?.next = node.next
+        node.next?.prev = node.prev
+    }
+
+    // Insert node at the end (most recently used)
+    private fun add(node: Node<K, V>) {
+        node.prev = tail.prev
+        node.next = tail
+        tail.prev?.next = node
+        tail.prev = node
+    }
+
+    // Get value by key
+    fun get(key: K): V? {
+        cache[key]?.let { node ->
+            remove(node)
+            add(node)  // Move the node to the end (most recent)
+            return node.value
         }
-        moveToHead(node);
-        return node.value;
+        return null
     }
 
-    public synchronized void put(K key, V value) {
-        Node<K, V> node = cache.get(key);
-        if (node != null) {
-            node.value = value;
-            moveToHead(node);
-        } else {
-            node = new Node<>(key, value);
-            cache.put(key, node);
-            addToHead(node);
-            if (cache.size() > capacity) {
-                Node<K, V> removedNode = removeTail();
-                cache.remove(removedNode.key);
+    // Put value into the cache
+    fun put(key: K, value: V) {
+        cache[key]?.let { node ->
+            // Remove the old node and insert a new one
+            remove(node)
+            node.value = value
+            add(node)
+        } ?: run {
+            // If it's a new key
+            val newNode = Node(key, value)
+            if (size == capacity) {
+                // Remove the least recently used (LRU) node
+                cache.remove(head.next?.key)
+                remove(head.next!!)
+            } else {
+                size++
             }
+            add(newNode)
+            cache[key] = newNode
         }
-    }
-
-    private void addToHead(Node<K, V> node) {
-        node.prev = head;
-        node.next = head.next;
-        head.next.prev = node;
-        head.next = node;
-    }
-
-    private void removeNode(Node<K, V> node) {
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
-    }
-
-    private void moveToHead(Node<K, V> node) {
-        removeNode(node);
-        addToHead(node);
-    }
-
-    private Node<K, V> removeTail() {
-        Node<K, V> node = tail.prev;
-        removeNode(node);
-        return node;
     }
 }

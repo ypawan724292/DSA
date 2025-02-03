@@ -1,21 +1,9 @@
-package lld.solutions.splitwise.splittype;
+package lld.solutions.splitwise.splittype
 
-import splitwise.User;
+import lld.solutions.splitwise.User
 
-public class PercentSplit extends Split {
-    private final double percent;
-
-    public PercentSplit(User user, double percent) {
-        super(user);
-        this.percent = percent;
-    }
-
-    @Override
-    public double getAmount() {
-        return amount;
-    }
-
-    public double getPercent() {
-        return percent;
+class PercentSplit(user: User?, val percent: Double) : Split(user) {
+    override fun getAmount(): Double {
+        return amount
     }
 }

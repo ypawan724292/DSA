@@ -1,13 +1,9 @@
-package lld.solutions.lrucache;
+package lld.solutions.lrucache
 
-class Node<K, V> {
-    K key;
-    V value;
-    Node<K, V> prev;
-    Node<K, V> next;
-
-    public Node(K key, V value) {
-        this.key = key;
-        this.value = value;
-    }
-}
+// Node for the doubly linked list
+data class Node<K, V>(
+    var key: K?,
+    var value: V?,
+    var prev: Node<K, V>? = null,
+    var next: Node<K, V>? = null
+)

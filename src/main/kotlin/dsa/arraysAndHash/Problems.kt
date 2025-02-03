@@ -203,6 +203,10 @@ class Problems {
      * Input: nums = [1,2,3,4,5,6,7,8,9,10]
      * Output: [1,2,3,4,5,6,7,8,10,9]
      *
+     *
+     * Example 5 :
+     * Input :[1,3,6,2,8,9,4,3,2,1]
+     * Output : [1,3,6,2,9,8,4,3,2,1]
      */
     fun nextPermutation(nums: IntArray) {
         fun swap(i: Int, j: Int) {
@@ -249,7 +253,8 @@ class Problems {
     /**
      * Array Leaders
      * You are given an array arr of positive integers. Your task is to find all the leaders in the array.
-     * An element is considered a leader if it is greater than or equal to all elements to its right. The rightmost element is always a leader.
+     * An element is considered a leader if it is greater than or equal to all elements to its right.
+     * The rightmost element is always a leader.
      *
      * Examples:
      *

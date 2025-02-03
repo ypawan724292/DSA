@@ -117,7 +117,7 @@ class Medium {
         val result = mutableListOf<Int>()
         val index = IntArray(k)
         while (pq.isNotEmpty()) {
-            val (value, row) = pq.poll()
+            val (value, row) = pq.remove()
             result.add(value)
             index[row]++
             if (index[row] < k) {

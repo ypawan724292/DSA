@@ -114,6 +114,7 @@ class Hard {
         }
 
         return atMostK(nums, k) - atMostK(nums, k - 1)
+
     }
 
 
@@ -158,37 +159,40 @@ class Hard {
          * Output = "aefg"
          *
          */
-        val sMap = mutableMapOf<Char, Int>()
-        val tMap = mutableMapOf<Char, Int>()
+        if (s.isEmpty() || t.isEmpty()) return ""
 
+        val tMap = mutableMapOf<Char, Int>()
         for (c in t) {
             tMap[c] = tMap.getOrDefault(c, 0) + 1
         }
 
-        var l = 0
-        var r = 0
+        var left = 0
+        var right = 0
         var minLen = Int.MAX_VALUE
         var minLeft = 0
-        var count = 0
+        var count = tMap.size
 
-        while (r < s.length) {
-            sMap[s[r]] = sMap.getOrDefault(s[r], 0) + 1
-            if (tMap.containsKey(s[r]) && sMap[s[r]] == tMap[s[r]]) {
-                count++
+        while (right < s.length) {
+            val rightChar = s[right]
+            if (tMap.containsKey(rightChar)) {
+                tMap[rightChar] = tMap[rightChar]!! - 1
+                if (tMap[rightChar] == 0) count--
             }
+            right++
 
-            while (count == tMap.size) {
-                if (r - l + 1 < minLen) {
-                    minLen = r - l + 1
-                    minLeft = l
+            while (count == 0) {
+                if (right - left < minLen) {
+                    minLen = right - left
+                    minLeft = left
                 }
-                sMap[s[l]] = sMap[s[l]]!! - 1
-                if (tMap.containsKey(s[l]) && sMap[s[l]]!! < tMap[s[l]]!!) {
-                    count--
+
+                val leftChar = s[left]
+                if (tMap.containsKey(leftChar)) {
+                    tMap[leftChar] = tMap[leftChar]!! + 1
+                    if (tMap[leftChar]!! > 0) count++
                 }
-                l++
+                left++
             }
-            r++
         }
 
         return if (minLen == Int.MAX_VALUE) "" else s.substring(minLeft, minLeft + minLen)
@@ -304,34 +308,34 @@ class Hard {
 
 
         //approach 2 : TC : O(n) SC : O(1)
-        var leftMax2 = 0
-        var rightMax2 = 0
+        var l = 0
+        var r = height.lastIndex
+        var total = 0
+        var lMax = 0
+        var rMax = 0
 
-        var left2 = 0
-        var right2 = n - 1
-        var res2 = 0
-
-        while (left2 < right2) {
-            if (height[left2] < height[right2]) {
-                if (height[left2] >= leftMax2) {
-                    leftMax2 = height[left2]
+        while (l < r) {
+            if (height[l] < height[r]) {
+                if (lMax >= height[l]) {
+                    total += height[l] - height[l + 1]
                 } else {
-                    res2 += leftMax2 - height[left2]
+                    lMax = height[l]
                 }
-                left2++
+                l++
             } else {
-                if (height[right2] >= rightMax2) {
-                    rightMax2 = height[right2]
-                } else {
-                    res2 += rightMax2 - height[right2]
+                if (height[r] > height[r - 1]) {
+                    if (rMax >= height[r]) {
+                        total += height[r] - height[r - 1]
+                    } else {
+                        rMax = height[r]
+                    }
+                    r--
                 }
-                right2--
             }
+
         }
-
-        return res2
+        return total
     }
-
 }
 
 fun main() {

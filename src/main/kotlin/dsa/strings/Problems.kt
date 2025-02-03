@@ -322,23 +322,27 @@ class Problems {
      * 1 ≤ K ≤ 26
      */
     fun countSubstrings(s: String, k: Int): Int {
-        var res = 0
-        val map = mutableMapOf<Char, Int>()
-        var left = 0
-        var right = 0
-        while (right < s.length) {
-            map[s[right]] = map.getOrDefault(s[right], 0) + 1
-            while (map.size > k) {
-                map[s[left]] = map[s[left]]!! - 1
-                if (map[s[left]] == 0) {
-                    map.remove(s[left])
+
+        fun atMostk(m: Int): Int {
+            var res = 0
+            val map = mutableMapOf<Char, Int>()
+            var left = 0
+            var right = 0
+            while (right < s.length) {
+                map[s[right]] = map.getOrDefault(s[right], 0) + 1
+                while (map.size > m) {
+                    map[s[left]] = map[s[left]]!! - 1
+                    if (map[s[left]] == 0) {
+                        map.remove(s[left])
+                    }
+                    left++
                 }
-                left++
+                res += right - left + 1
+                right++
             }
-            res += right - left + 1
-            right++
+            return res
         }
-        return res
+        return atMostk(k) - atMostk(k - 1)
     }
 
     /**
@@ -441,7 +445,7 @@ class Problems {
         val vset = mutableSetOf<Char>('a', 'e', 'i', 'o', 'u')
 
         fun isStartAndEndVowel(s: String): Int {
-            return if (vset.contains(s[0]) && vset.contains(s[s.length - 1])) 1 else 0
+            return if (vset.contains(s[0]) && vset.contains(s.last())) 1 else 0
         }
 
         val prefixSum = IntArray(words.size)

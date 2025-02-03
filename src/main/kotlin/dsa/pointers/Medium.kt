@@ -115,6 +115,8 @@ class Medium {
      * Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
      */
     fun maxOnesWithKFlips(arr: IntArray, k: Int): Int {
+
+        //TC : O(n)
         var count = 0
 
         var res = 0
@@ -166,7 +168,8 @@ class Medium {
      * The trees are represented by an integer array of arr[], where arr[i]  is the type of fruit the ith tree produces.
      * You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow :
      *
-     * You only have two baskets, and each basket can only hold a single type of fruit. There is no limit on the amount of fruit each basket can hold.
+     * You only have two baskets, and each basket can only hold a single type of fruit.
+     * There is no limit on the amount of fruit each basket can hold.
      * Starting from any tree of your choice, you must pick exactly one fruit from every tree (including the start tree) while moving to the right.
      * The picked fruits must fit in one of the baskets.
      * Once you reach a tree with fruit that cannot fit in your baskets, you must stop.
@@ -250,7 +253,8 @@ class Medium {
      * Medium
      * Topics
      * Companies
-     * You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+     * You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character.
+     * You can perform this operation at most k times.
      *
      * Return the length of the longest substring containing the same letter you can get after performing the above operations.
      *
@@ -308,6 +312,7 @@ class Medium {
 
             while (r - l + 1 - maxCount > k) {
                 map[s[l]] = map[s[l]]!! - 1
+                if (map[s[l]] == 0) map.remove(s[l])
                 l++
             }
 
@@ -318,13 +323,14 @@ class Medium {
 
         //optimized
 
-
+        r = 0
         while (r < s.length) {
             map[s[r]] = map.getOrDefault(s[r], 0) + 1
             maxCount = maxOf(maxCount, map[s[r]]!!)
 
             if (r - l + 1 - maxCount > k) {
                 map[s[l]] = map[s[l]]!! - 1
+                if (map[s[l]] == 0) map.remove(s[l])
                 l++
             }
 
@@ -371,7 +377,7 @@ class Medium {
      * 0 <= goal <= nums.length
      */
     fun numSubarraysWithSum(nums: IntArray, goal: Int): Int {
-       // Refer Arrays and Hash Problems File
+        // Refer Arrays and Hash Problems File
 
         /*
         Intution we will find max subarray with sum at most k and max subarray with sum at most k - 1,
@@ -435,14 +441,14 @@ class Medium {
      */
     fun numberOfNiceSubarrays(nums: IntArray, k: Int): Int {
         // using prefix sum
-        val prefix = IntArray(nums.size + 1)
+        val prefix = mutableMapOf<Int, Int>()
         var count = 0
         var res = 0
         prefix[0] = 1
         for (num in nums) {
             count += num and 1
-            res += if (count >= k) prefix[count - k] else 0
-            prefix[count]++
+            res += prefix.getOrDefault(count - k, 0)
+            prefix[count] = prefix.getOrDefault(count, 0) + 1
         }
 
         // using sliding window
@@ -567,6 +573,7 @@ class Medium {
      */
     fun maxScore(cardPoints: IntArray, k: Int): Int {
         //[11,49,100,20,86,29,72] 232 , 4
+        if (k == cardPoints.size) return cardPoints.sum()
         var res = 0
         var lSum = 0
         var rSum = 0
@@ -578,7 +585,7 @@ class Medium {
 
         var l = k - 1
         var r = cardPoints.lastIndex
-        while(l >= 0) {
+        while (l >= 0) {
             rSum += cardPoints[r]
             lSum -= cardPoints[l]
             res = maxOf(res, lSum + rSum)

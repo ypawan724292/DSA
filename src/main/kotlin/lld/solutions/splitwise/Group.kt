@@ -1,42 +1,21 @@
-package lld.solutions.splitwise;
+package lld.solutions.splitwise
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArrayList
 
-public class Group {
-    private final String id;
-    private final String name;
-    private final List<User> members;
-    private final List<Expense> expenses;
+class Group(val id: String?, val name: String?) {
+    val members: MutableList<User?>
+    val expenses: MutableList<Expense?>
 
-    public Group(String id, String name) {
-        this.id = id;
-        this.name = name;
-        this.members = new CopyOnWriteArrayList<>();
-        this.expenses = new CopyOnWriteArrayList<>();
+    init {
+        this.members = CopyOnWriteArrayList<User?>()
+        this.expenses = CopyOnWriteArrayList<Expense?>()
     }
 
-    public void addMember(User user) {
-        members.add(user);
+    fun addMember(user: User?) {
+        members.add(user)
     }
 
-    public void addExpense(Expense expense) {
-        expenses.add(expense);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<User> getMembers() {
-        return members;
-    }
-
-    public List<Expense> getExpenses() {
-        return expenses;
+    fun addExpense(expense: Expense?) {
+        expenses.add(expense)
     }
 }

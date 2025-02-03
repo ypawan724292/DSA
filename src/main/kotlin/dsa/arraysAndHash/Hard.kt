@@ -254,6 +254,10 @@ class Hard {
      *
      * What is an inversion of an array? Definition: for all i & j < size of array, if i < j
      * then you have to find pair (A[i],A[j]) such that A[j] < A[i].
+     *
+     * Example:
+     * Input: [2, 4, 1, 3, 5]
+     * Output: 3 (inversions are (2,1), (4,1), (4,3))
      */
     fun mergeSortAndCount(arr: IntArray, l: Int, r: Int): Int {
 

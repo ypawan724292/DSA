@@ -1,15 +1,13 @@
-package lld.solutions.splitwise.splittype;
+package lld.solutions.splitwise.splittype
 
-import splitwise.User;
+import lld.solutions.splitwise.User
 
-public class ExactSplit extends Split {
-    public ExactSplit(User user, double amount) {
-        super(user);
-        this.amount = amount;
+class ExactSplit(user: User?, amount: Double) : Split(user) {
+    init {
+        this.amount = amount
     }
 
-    @Override
-    public double getAmount() {
-        return amount;
+    override fun getAmount(): Double {
+        return amount
     }
 }

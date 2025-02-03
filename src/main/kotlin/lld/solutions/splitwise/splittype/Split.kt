@@ -1,22 +1,18 @@
-package lld.solutions.splitwise.splittype;
+package lld.solutions.splitwise.splittype
 
-import splitwise.User;
+import lld.solutions.splitwise.User
 
-public abstract class Split {
-    protected User user;
-    protected double amount;
 
-    public Split(User user) {
-        this.user = user;
+abstract class Split(protected var user: User?) {
+    protected var amount: Double = 0.0
+
+    abstract fun getAmount(): Double
+
+    open fun setAmount(amount: Double) {
+        this.amount = amount
     }
 
-    public abstract double getAmount();
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public User getUser() {
-        return user;
+    fun getUser(): User? {
+        return user
     }
 }

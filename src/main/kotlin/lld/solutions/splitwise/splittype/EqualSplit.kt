@@ -1,18 +1,13 @@
-package lld.solutions.splitwise.splittype;
+package lld.solutions.splitwise.splittype
 
-import splitwise.User;
+import lld.solutions.splitwise.User
 
-public class EqualSplit extends Split {
-    public EqualSplit(User user) {
-        super(user);
+class EqualSplit(user: User?) : Split(user) {
+    override fun getAmount(): Double {
+        return amount
     }
 
-    @Override
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
+    override fun setAmount(amount: Double) {
+        this.amount = amount
     }
 }

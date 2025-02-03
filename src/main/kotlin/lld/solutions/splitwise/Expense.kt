@@ -1,46 +1,15 @@
-package lld.solutions.splitwise;
+package lld.solutions.splitwise
 
-import splitwise.splittype.Split;
+import lld.solutions.splitwise.splittype.Split
 
-import java.util.ArrayList;
-import java.util.List;
+class Expense(val id: String, val amount: Double, val description: String, val paidBy: User) {
+    private val splits: MutableList<Split> = ArrayList<Split>()
 
-public class Expense {
-    private final String id;
-    private final double amount;
-    private final String description;
-    private final User paidBy;
-    private final List<Split> splits;
-
-    public Expense(String id, double amount, String description, User paidBy) {
-        this.id = id;
-        this.amount = amount;
-        this.description = description;
-        this.paidBy = paidBy;
-        this.splits = new ArrayList<>();
+    fun addSplit(split: Split) {
+        splits.add(split)
     }
 
-    public void addSplit(Split split) {
-        splits.add(split);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public User getPaidBy() {
-        return paidBy;
-    }
-
-    public List<Split> getSplits() {
-        return splits;
+    fun getSplits(): MutableList<Split> {
+        return splits
     }
 }

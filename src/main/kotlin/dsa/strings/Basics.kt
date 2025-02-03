@@ -53,9 +53,21 @@ class Basics {
          */
         val result = StringBuilder()
         var open = 0
+        var closed = 0
         for (c in s) {
-            if (c == '(' && open++ > 0) result.append(c)
-            if (c == ')' && open-- > 1) result.append(c)
+            if (c == '(') {
+                open++
+                if (open > 1)
+                    result.append(c)
+            } else {
+                closed++
+                if (open == closed) {
+                    open = 0
+                    closed = 0
+                } else {
+                    result.append(c)
+                }
+            }
         }
         return result.toString()
     }
@@ -124,7 +136,9 @@ class Basics {
      * Topics
      * Companies
      * Hint
-     * You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string "" if no odd integer exists.
+     * You are given a string num, representing a large integer.
+     * Return the largest-valued odd integer (as a string) that is a non-empty substring of num,
+     * or an empty string "" if no odd integer exists.
      *
      * A substring is a contiguous sequence of characters within a string.
      *
@@ -200,7 +214,33 @@ class Basics {
             prefix += first[i]
         }
 
-        return prefix
+//        return prefix
+
+        if (strs.isEmpty()) return ""
+
+        fun isCommonPrefix(strs: Array<String>, length: Int): Boolean {
+            val prefix = strs[0].substring(0, length)
+            for (i in 1 until strs.size) {
+                if (!strs[i].startsWith(prefix)) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        var low = 1
+        var high = strs.minOf { it.length }
+
+        while (low <= high) {
+            val mid = (low + high) / 2
+            if (isCommonPrefix(strs, mid)) {
+                low = mid + 1
+            } else {
+                high = mid - 1
+            }
+        }
+
+        return strs[0].substring(0, (low + high) / 2)
     }
 
     /**
@@ -380,10 +420,6 @@ class Basics {
 
             res = maxOf(res, zero + one)
         }
-
-
-
-
         return res
     }
 
