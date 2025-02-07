@@ -376,7 +376,7 @@ class `1D` {
 
             val mid = low + (high - low) / 2
             val next = (mid + 1) % n
-            val prev = (mid + n - 1) % n
+            val prev = (mid - 1 + n) % n
 
             // Check if mid is the minimum element
             if (arr[mid] <= arr[next] && arr[mid] <= arr[prev]) {
@@ -390,7 +390,7 @@ class `1D` {
             }
         }
 
-        return 0 // Should not reach here in a valid rotated sorted array
+        return -1 // Should not reach here in a valid rotated sorted array
     }
 
 
@@ -423,7 +423,7 @@ class `1D` {
                 else -> high = mid - 1
             }
         }
-        return high
+        return res
     }
 
     /**

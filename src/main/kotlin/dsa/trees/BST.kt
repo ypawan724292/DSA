@@ -1,6 +1,7 @@
 package dsa.trees
 
 import annotations.Important
+import kotlin.compareTo
 
 class BST {
 
@@ -141,11 +142,12 @@ class BST {
                 if (node.left == null) return node.right
                 if (node.right == null) return node.left
 
-                var temp = node
-                while (temp.right != null) {
+                val rightChild = node.right
+                var temp = node.left
+                while (temp?.right != null) {
                     temp = temp.right!!
                 }
-                temp.left = node.left
+                temp!!.right = rightChild
                 return node.right
             }
 
@@ -484,4 +486,37 @@ class BST {
         }
         return dfs(root).first
     }
+
+    fun rangeSumBST(root: TreeNode?, low: Int, high: Int): Int {
+        var sum = 0
+        fun dfs(node: TreeNode?) {
+            if (node == null) return
+            if (node.value in low..high) sum += node.value
+            if (node.value > low) dfs(node.left)
+            if (node.value < high) dfs(node.right)
+        }
+        dfs(root)
+        return sum
+    }
+
+    /**
+     * Print BST keys in the given range
+     * Given two values n1 and n2 where n1 < n2 and a root pointer to a Binary Search Tree.
+     * The task is to find all the keys of the tree in the range n1 to n2 in increasing order.
+     *
+     * Input: root = [10,5,15,1,8,null,7], low = 7, high = 15
+     *
+     */
+    fun rangeInBST(root: TreeNode?, low: Int, high: Int): List<Int> {
+        val list = mutableListOf<Int>()
+        fun dfs(node: TreeNode?) {
+            if (node == null) return
+            if (node.value >= low) dfs(node.left)
+            if (node.value in low..high) list.add(node.value)
+            if (node.value <= high) dfs(node.right)
+        }
+        dfs(root)
+        return list
+    }
+
 }

@@ -615,18 +615,6 @@ class BinaryTree {
             return false
         }
         dfs(root)
-//        return result
-
-        if (root == null) return emptyList()
-        val queue = ArrayDeque<TreeNode>()
-        queue.add(root)
-        while (queue.isNotEmpty()) {
-            val current = queue.removeFirst()
-            result.add(current.value)
-            if (current == node) break
-            current.left?.let { queue.add(it) }
-            current.right?.let { queue.add(it) }
-        }
         return result
     }
 
@@ -801,6 +789,7 @@ class BinaryTree {
     /**
      * Sum of leaf nodes at minimum level
      *
+     * Minimum level is the 1st level from the root where we have at least one leaf node.
      * Example:
      *
      * Input :
@@ -916,6 +905,7 @@ class BinaryTree {
      *
      */
     fun countNodes(root: TreeNode?): Int {
+        //we can use the moris inorder traversal to count the nodes in O(n) time complexity
         // Naive approach
         fun dfs(node: TreeNode?): Int {
             if (node == null) return 0
@@ -1196,6 +1186,46 @@ class BinaryTree {
             }
             current = current.right
         }
+    }
+
+    /**
+     * Root to leaf path sum equal to a given number
+     * Given a binary tree and a sum, return true if the tree has a root-to-leaf path such that adding up all the values
+     * along the path equals the given sum. Return false if no such path can be found.
+     */
+    fun hasPathSum(root: BST.TreeNode?, sum: Int): Boolean {
+        if (root == null) return false
+        if (root.left == null && root.right == null && sum - root.value == 0) return true
+        return hasPathSum(root.left, sum - root.value) || hasPathSum(root.right, sum - root.value)
+    }
+
+    /**
+     * Convert a given tree to its Sum Tree
+     * Given a Binary Tree where each node has positive and negative values.
+     * Convert this to a tree where each node contains the sum of the left and right sub trees in the original tree. The values of leaf nodes are changed to 0.
+     *
+     * For example, the following tree
+     *
+     *                   10
+     *                /      \
+     *              -2        6
+     *            /   \      /  \
+     *          8     -4    7    5
+     * should be changed to
+     *
+     *                  20(4-2+12+6)
+     *                /      \
+     *          4(8-4)      12(7+5)
+     *            /   \      /  \
+     *          0      0    0    0
+     */
+    fun toSumTree(root: BST.TreeNode?): Int {
+        if (root == null) return 0
+        val left = toSumTree(root.left)
+        val right = toSumTree(root.right)
+        val old = root.value
+        root.value = left + right
+        return old + root.value
     }
 
 

@@ -130,7 +130,10 @@ class Medium {
     /**
      * Replace elements by its rank in the array
      * Difficulty: MediumAccuracy: 49.96%Submissions: 27K+Points: 4
-     * Given an array arr of N integers, the task is to replace each element of the array by its rank in the array. The rank of an element is defined as the distance between the element with the first element of the array when the array is arranged in ascending order. If two or more are same in the array then their rank is also the same as the rank of the first occurrence of the element.
+     * Given an array arr of N integers, the task is to replace each element of the array by its rank in the array.
+     * The rank of an element is defined as the distance between the element with the first element of the array
+     * when the array is arranged in ascending order.
+     * If two or more are same in the array then their rank is also the same as the rank of the first occurrence of the element.
      *
      * Example 1:
      *
@@ -299,7 +302,7 @@ class Medium {
         val pq = PriorityQueue<Int>()
         pq.addAll(map.keys)
         while (pq.isNotEmpty()) {
-            val start = pq.poll()
+            val start = pq.remove()
             for (i in 0 until groupSize) {
                 if (map.getOrDefault(start + i, 0) == 0) {
                     return false
@@ -315,11 +318,13 @@ class Medium {
 
     /**
      * Find Subsequence of Length K With the Largest Sum
-     * You are given an integer array nums and an integer k. You want to find a subsequence of nums of length k that has the largest sum.
+     * You are given an integer array nums and an integer k.
+     * You want to find a subsequence of nums of length k that has the largest sum.
      *
      * Return any such subsequence as an integer array of length k.
      *
-     * A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
+     * A subsequence is an array that can be derived from another array by deleting some or no elements
+     * without changing the order of the remaining elements.
      *
      *
      * Example 1:
@@ -355,8 +360,7 @@ class Medium {
 
 
         return pq.sortedBy { it[0] }
-            .map {
-                it[1]
+            .map { it[1]
             }.toIntArray()
 
     }

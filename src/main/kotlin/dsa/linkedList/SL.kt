@@ -362,16 +362,19 @@ class SL {
         var first: Node? = dummy
         var second: Node? = dummy
 
-        for (i in 1..n + 1) {
+        for (i in 0 until n) {
             first = first?.next
+            if (first == null) {
+                return head
+            }
         }
 
-        while (first != null) {
+        while (first?.next != null) {
             first = first.next
             second = second?.next
         }
 
-        second?.next = second?.next?.next
+        second?.next = second.next?.next
         return dummy.next
     }
 

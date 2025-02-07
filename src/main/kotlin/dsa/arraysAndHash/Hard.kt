@@ -272,6 +272,9 @@ class Hard {
                 if (left[i] <= right[j]) {
                     arr[k++] = left[i++]
                 } else {
+                    //Since left is sorted, all the remaining elements in left (from left[i] onwards) are also greater than right[j].
+                    // So, you have (mid - i + 1) inversions (where mid is the last index of the left subarray).
+                    //You take right[j] and move j forward.
                     arr[k++] = right[j++]
                     count += mid - i + 1
                 }

@@ -110,6 +110,7 @@ class DLL {
             if (current.data == key) {
                 // If the node to be deleted is the head
                 if (current == newHead) {
+                    newHead = current.next
                     current.next?.prev = null
                 } else {
                     // Update the links of previous and next nodes
@@ -163,7 +164,15 @@ class DLL {
                 }
                 current = current.next!!
             }
-            current.next = leftPtr ?: rightPtr
+            if (leftPtr != null) {
+                current.next = leftPtr
+                leftPtr.prev = current
+            }
+
+            if (rightPtr != null) {
+                current.next = rightPtr
+                rightPtr.prev = current
+            }
 
             return temp.next!!
         }
@@ -182,6 +191,7 @@ class DLL {
      * (1, 6)
      */
     fun findPairsWithSum(head: Node?, target: Int) {
+        //works only for sorted DLL
         var low = head
         var high = head
 
