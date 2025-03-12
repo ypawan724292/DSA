@@ -163,7 +163,7 @@ class SegmentTree(private val arr: IntArray) {
         return leftFreq + rightFreq
     }
 
-
+    //fenwick-tree
 }
 
 // Example usage

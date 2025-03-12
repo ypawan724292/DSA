@@ -1,6 +1,12 @@
-package dsa.stackAndQueue
+package dsa.sAq
 
 class Basics {
+    /**
+     * ArrayDeque as Stack use add and removeLast
+     * ArrayDeque as Queue use add and removeFirst
+     *
+     * ArrayDeque as Dq use addLast addFirst , removeFirst removeLast
+     */
 
     /**
      * Implement a stack using an array
@@ -75,46 +81,35 @@ class Basics {
      * Implement stack using queue
      */
     inner class StackUsingQueue {
-        /*
-        Intution:
-        1. We can use two queues to implement a stack.
-        2. One queue is used for push operation and
-        another queue is used for pop operation.
-        3. We can move all elements from the first queue to the second queue
-        when we need to perform the pop operation.
-        4. We can move all elements from the second queue to the first queue
-        when we need to perform the push operation.
 
-        */
-        var queue1 = ArrayDeque<Int>()
-        var queue2 = ArrayDeque<Int>()
+        /**
+         * Push: Insert the element normally.
+         * Pop: Rotate the queue until the last element is at the front, then remove it.
+         * Top: Same as pop() but put the element back.
+         * Time Complexity:
+         * push() → O(n) (Due to rotation)
+         * pop() → O(1)
+         * top() → O(1)
+         * empty() → O(1)
+         *
+         */
+        private val q: ArrayDeque<Int> = ArrayDeque()
 
-        fun push(value: Int) {
-            queue1.add(value)
-            while (queue2.isNotEmpty()) {
-                queue1.add(queue2.removeFirst())
-            }
-            val temp = queue1
-            queue1 = queue2
-            queue2 = temp
+        fun push(x: Int) {
+            q.add(x)
+            repeat(q.size - 1) { q.addLast(q.removeFirst()) } // Rotate to maintain stack order
         }
 
         fun pop(): Int {
-            if (queue2.isEmpty()) {
-                throw IllegalStateException("Stack is empty")
-            }
-            return queue2.removeFirst()
+            return q.removeFirst() // LIFO behavior
         }
 
-        fun peek(): Int {
-            if (queue2.isEmpty()) {
-                throw IllegalStateException("Stack is empty")
-            }
-            return queue2.first()
+        fun top(): Int {
+            return q.first() // Peek the front element
         }
 
-        fun isEmpty(): Boolean {
-            return queue2.isEmpty()
+        fun empty(): Boolean {
+            return q.isEmpty()
         }
 
     }
@@ -135,33 +130,33 @@ class Basics {
         when we need to perform the enqueue operation.
 
          */
-        val stack1 = ArrayDeque<Int>()
-        val stack2 = ArrayDeque<Int>()
+        private val s1 = ArrayDeque<Int>()
+        private val s2 = ArrayDeque<Int>()
 
         fun enqueue(value: Int) {
-            stack1.add(value)
+            s1.add(value)
         }
 
         fun dequeue(): Int {
-            if (stack2.isEmpty()) {
-                while (stack1.isNotEmpty()) {
-                    stack2.add(stack1.removeLast())
+            if (s2.isEmpty()) {
+                while (s1.isNotEmpty()) {
+                    s2.add(s1.removeLast())
                 }
             }
-            return stack2.removeLast()
+            return s2.removeLast()
         }
 
         fun peek(): Int {
-            if (stack2.isEmpty()) {
-                while (stack1.isNotEmpty()) {
-                    stack2.add(stack1.removeLast())
+            if (s2.isEmpty()) {
+                while (s1.isNotEmpty()) {
+                    s2.add(s1.removeLast())
                 }
             }
-            return stack2.last()
+            return s2.last()
         }
 
         fun isEmpty(): Boolean {
-            return stack1.isEmpty() && stack2.isEmpty()
+            return s1.isEmpty() && s2.isEmpty()
         }
     }
 
@@ -267,6 +262,108 @@ class Basics {
     }
 
     /**
+     * A Circular Queue is a fixed-size queue that treats the array as circular. This means:
+     *
+     * The last position connects to the first (wrap-around behavior).
+     * It prevents wasted space by reusing empty slots when elements are dequeued.
+     * It uses two pointers:
+     * front → Points to the first element.
+     * rear → Points to the last element.
+     *
+     */
+    class MyCircularQueue(private val capacity: Int) {
+        // Here is size variable defines the
+        private val data = IntArray(capacity)
+        private var front = 0
+        private var rear = -1
+        private var size = 0
+
+        fun enqueue(value: Int): Boolean {
+            if (isFull()) return false
+            rear = (rear + 1) % capacity
+            data[rear] = value
+            size++
+            return true
+        }
+
+        fun dequeue(): Int? {
+            if (isEmpty()) return null
+            front = (front + 1) % capacity
+            size--
+            return data[front]
+        }
+
+        fun front(): Int {
+            return if (isEmpty()) -1 else data[front]
+        }
+
+        fun rear(): Int {
+            return if (isEmpty()) -1 else data[rear]
+        }
+
+        fun isEmpty(): Boolean = size == 0
+
+        fun isFull(): Boolean = size == capacity
+    }
+
+
+    //-----------------------------------------------Start Revise the concepts-----------------------------------------------------------------------------------------//
+    /**
+     * Example : 1 - 2 -3 -4 -5
+     * Output : 5-4-3-4-1
+     */
+    fun reverseQueue(q: ArrayDeque<Int>) {
+        if (q.isEmpty()) return
+
+        val front = q.removeFirst()
+        reverseQueue(q)
+        q.add(front)
+    }
+
+    fun reverseStack(stack: ArrayDeque<Int>) {
+        if (stack.isEmpty()) return
+
+        val top = stack.removeLast() // Remove top element
+        reverseStack(stack) // Reverse remaining stack
+        insertAtBottom(stack, top) // Insert removed element at bottom
+    }
+
+    /**
+     *  Example : 1 - 2 -3 -4 -5
+     *  Output : 5-4-3-4-1
+     */
+    fun insertAtBottom(stack: ArrayDeque<Int>, value: Int) {
+        if (stack.isEmpty()) {
+            stack.add(value)
+            return
+        }
+        val top = stack.removeLast()
+        insertAtBottom(stack, value)
+        stack.add(top)
+    }
+
+    fun sortStack(stack: ArrayDeque<Int>) {
+        if (stack.isNotEmpty()) {
+            val temp = stack.removeLast()  // Step 1: Remove top element
+            sortStack(stack)         // Step 2: Sort remaining stack
+            insertInSortedOrder(stack, temp)  // Step 3: Insert in correct position
+        }
+    }
+
+    fun insertInSortedOrder(stack: ArrayDeque<Int>, element: Int) {
+        if (stack.isEmpty() || stack.last() <= element) {
+            stack.add(element)  // If empty or top is smaller, insert
+        } else {
+            val temp = stack.removeLast()  // Remove larger element
+            insertInSortedOrder(stack, element)  // Recur until correct position is found
+            stack.add(temp)  // Push back the removed element
+        }
+    }
+
+    //-----------------------------------------------End Revise the concepts-----------------------------------------------------------------------------------------//
+
+
+    /**
      * Valid Parentheses
      */
     fun validParentheses(s: String): Boolean {
@@ -274,9 +371,9 @@ class Basics {
         for (c in s) {
             when (c) {
                 '(', '[', '{' -> stack.add(c)
-                ')' -> if (stack.isEmpty() || stack.removeLast() != '(') return false
-                ']' -> if (stack.isEmpty() || stack.removeLast() != '[') return false
-                '}' -> if (stack.isEmpty() || stack.removeLast() != '{') return false
+                ')' -> if (stack.removeLastOrNull() != '(') return false
+                ']' -> if (stack.removeLastOrNull() != '[') return false
+                '}' -> if (stack.removeLastOrNull() != '{') return false
             }
         }
         return stack.isEmpty()
@@ -292,10 +389,10 @@ class Basics {
 
         fun push(`val`: Int) {
             if (stack.isEmpty()) {
-                stack.addLast(Node(`val`, `val`))
+                stack.add(Node(`val`, `val`))
             } else {
                 val min = stack.last().min
-                stack.addLast(Node(`val`, minOf(min, `val`)))
+                stack.add(Node(`val`, minOf(min, `val`)))
             }
         }
 

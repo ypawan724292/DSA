@@ -1,6 +1,7 @@
 package dsa.dp
 
 import annotations.Important
+import java.util.PriorityQueue
 
 class `String-DP` {
     /**
@@ -304,8 +305,8 @@ class `String-DP` {
         //recursive approach {top-down} and memoization
         val memo = Array(m + 1) { IntArray(n + 1) { -1 } }
         fun f(i: Int, j: Int): Int {
-            if(j==0) return 1
-            if(i==0) return 0
+            if (j == 0) return 1
+            if (i == 0) return 0
 
             if (memo[i][j] != -1) return memo[i][j]
 
@@ -327,10 +328,10 @@ class `String-DP` {
         val dp = Array(m + 1) { IntArray(n + 1) }
         for (i in 0..m) {
             for (j in 0..n) {
-                if ( j == 0) dp[i][j] = 1
+                if (j == 0) dp[i][j] = 1
                 if (i == 0) dp[i][j] = 0
                 else dp[i][j] = if (str1[i - 1] == str2[j - 1]) {
-                    val take =  dp[i - 1][j - 1]
+                    val take = dp[i - 1][j - 1]
                     val noTake = 0 + dp[i - 1][j]
                     take + noTake
                 } else {
@@ -448,7 +449,10 @@ class `String-DP` {
             memo[i][j] = if (str1[i - 1] == str2[j - 1] || str1[i - 1] == '?') {
                 f(i - 1, j - 1)
             } else if (str1[i - 1] == '*') {
-                val noTake = f(i - 1, j) // taking the character before * in the next iteration other charecters are matched with *
+                val noTake = f(
+                    i - 1,
+                    j
+                ) // taking the character before * in the next iteration other charecters are matched with *
                 val take = f(i, j - 1) // not taking the character before *
                 take || noTake
             } else {
@@ -532,7 +536,10 @@ class `String-DP` {
                 f(i - 1, j - 1)
             } else if (p[j - 1] == '*') {
                 val zero = f(i, j - 1) // zero occurrences of '.' // 'character before *'
-                val one = (s[i - 1] == p[j - 2] || p[j - 2] == '.') && f(i - 1, j) // one or more occurrences of '.'// 'any number of preceding element'
+                val one = (s[i - 1] == p[j - 2] || p[j - 2] == '.') && f(
+                    i - 1,
+                    j
+                ) // one or more occurrences of '.'// 'any number of preceding element'
                 zero || one
             } else {
                 false
@@ -586,6 +593,32 @@ class `String-DP` {
 
 
          */
+    }
+
+    /**
+     * Word break
+     */
+    fun wordBreak(str: String, dict: List<String>): Boolean {
+        val hset = dict.toSet()
+        val n = str.length
+        val memo = IntArray(n + 1) { -1 }
+
+        fun canBreak(s: Int): Boolean {
+            if (s == str.length) return true
+
+            if (memo[s] != -1) return memo[s] == 1
+
+            for (e in s + 1..str.length) {
+                val subStr = str.substring(s, e)
+                if (subStr in hset && canBreak(e)) {
+                    memo[s] = 1
+                    return true
+                }
+            }
+            memo[s] = 0
+            return false
+        }
+        return canBreak(0)
     }
 
 }

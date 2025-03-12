@@ -1,4 +1,4 @@
-package dsa.stackAndQueue
+package dsa.sAq
 
 import annotations.Important
 import kotlin.collections.ArrayDeque
@@ -263,9 +263,9 @@ class Monotonic {
          *   Example:
          *   [3,1,2,4]
          *   PSE: [-1,-1,1,2]
-         *   NSE: [3,2,3,4]
+         *   NSE: [1,4,4,4]
          *
-         *   The number of subarrays in which 1 is the minimum element is (1-(-1))*(2-1) = 2*1 = 2
+         *   The number of subarrays in which 1 is the minimum element is  [1-(-1)] * [4-1] = 2*3 = 6
          *
          *
          */

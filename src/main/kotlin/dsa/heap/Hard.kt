@@ -291,4 +291,56 @@ class Hard {
         return res
     }
 
+    /**
+     * Some other questions
+     *
+     * Easy:
+     * Kth Largest Element in a Stream (Leetcode #703)
+     * Use a min-heap to keep track of the k largest elements.
+     *
+     * Last Stone Weight (Leetcode #1046)
+     * Use a max-heap to repeatedly smash the two largest stones.
+     *
+     * Kth Largest Element in an Array (Leetcode #215)
+     * Use a min-heap of size k to keep track of the top k elements.
+     *
+     * Merge K Sorted Lists (Leetcode #23)
+     * Use a min-heap to repeatedly extract the smallest node from k lists.
+     *
+     * Medium:
+     * Top K Frequent Elements (Leetcode #347)
+     * Use a min-heap of size k or a max-heap with frequency counts.
+     *
+     * Task Scheduler (Leetcode #621)
+     * Use a max-heap to schedule the most frequent tasks first.
+     *
+     * Find Median from Data Stream (Leetcode #295)
+     * Use two heaps (max-heap + min-heap) to dynamically track the median.
+     *
+     * Reorganize String (Leetcode #767)
+     * Use a max-heap to greedily place the most frequent characters first.
+     *
+     * Reduce Array Size to Half (Leetcode #1338)
+     * Use a max-heap to greedily remove the most frequent elements.
+     *
+     * Hard:
+     * Sliding Window Maximum (Leetcode #239)
+     * Use a max-heap or a deque to keep track of window maximums.
+     *
+     * Find K Pairs with Smallest Sums (Leetcode #373)
+     * Use a min-heap to track the smallest sum pairs.
+     *
+     * Smallest Range Covering Elements from K Lists (Leetcode #632)
+     * Use a min-heap to track the smallest element in each list and adjust the range.
+     *
+     * Kth Smallest Element in a Sorted Matrix (Leetcode #378)
+     * Use a min-heap to find the kth smallest element efficiently.
+     *
+     * IPO (Maximize Capital) (Leetcode #502)
+     * Use a min-heap for capital and a max-heap for profits to maximize investment returns.
+     *
+     * Sliding Window Median - LeetCode #480
+     *
+     */
+
 }

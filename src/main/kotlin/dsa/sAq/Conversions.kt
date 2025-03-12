@@ -1,4 +1,4 @@
-package dsa.stackAndQueue
+package dsa.sAq
 
 class Conversions {
 

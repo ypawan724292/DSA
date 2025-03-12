@@ -423,4 +423,37 @@ class Basics {
         return res
     }
 
+    fun findAnagrams(s: String, p: String): List<Int> {
+        val result = mutableListOf<Int>()
+        if (s.length < p.length) return result
+
+        val pCount = IntArray(26)
+        val sCount = IntArray(26)
+
+        for (i in p.indices) {
+            pCount[p[i] - 'a']++
+            sCount[s[i] - 'a']++
+        }
+
+        for (i in 0 until s.length - p.length) {
+            if (pCount.contentEquals(sCount)) {
+                result.add(i)
+            }
+            sCount[s[i] - 'a']--
+            sCount[s[i + p.length] - 'a']++
+        }
+
+        if (pCount.contentEquals(sCount)) {
+            result.add(s.length - p.length)
+        }
+
+        return result
+    }
+
+    fun main() {
+        val s = "cbaebabacd"
+        val p = "abc"
+        println(findAnagrams(s, p)) // Output: [0, 6]
+    }
+
 }

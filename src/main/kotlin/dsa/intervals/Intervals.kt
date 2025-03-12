@@ -842,6 +842,7 @@ class Intervals {
             3. if count == 3 then, dec the start and inc the end return false
             4. else return true
              */
+            //TC = log (n)
             map[start] = map.getOrDefault(start, 0) + 1
             map[end] = map.getOrDefault(end, 0) - 1
 

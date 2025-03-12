@@ -126,10 +126,16 @@ class `2D-3D-Grid-DP` {
         // TC : O(2^(m+n)) bcuz at each cell we have 2 choices
         val memo = Array(m) { IntArray(n) { -1 } }
         fun f(i: Int, j: Int): Int {
-            if (i < 0 || j < 0) return 0
             if (i == 0 && j == 0) return 1
             if (memo[i][j] != -1) return memo[i][j]
-            memo[i][j] = f(i - 1, j) + f(i, j - 1)
+            var up = 0
+            var left = 0
+            if (i > 0)
+                up = f(i - 1, j)
+            if (j > 0)
+                left = f(i, j - 1)
+
+            memo[i][j] = up + left
             return memo[i][j]
         }
 
@@ -143,6 +149,7 @@ class `2D-3D-Grid-DP` {
                 if (i == 0 && j == 0) {
                     dp[i][j] = 1
                 } else {
+                    //check memo
                     dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
                 }
             }

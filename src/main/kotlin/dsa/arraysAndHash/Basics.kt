@@ -1,5 +1,7 @@
 package dsa.arraysAndHash
 
+import java.util.*
+
 class Basics {
 
     /**
